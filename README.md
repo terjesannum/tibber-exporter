@@ -8,7 +8,7 @@ Monitor your power usage and costs with Prometheus and Grafana.
 
 This prometheus exporter will connect to the Tibber API, subscribe to updates from [Tibber Pulse](https://tibber.com/no/pulse) and make the metrics available for Prometheus.
 See the provided [Grafana dashboard](grafana/dashboard.json) for examples on how they can be used.  
-Note that the consumption, cost and price heatmaps panels requires the [Hourly heatmap plugin](https://grafana.com/grafana/plugins/marcusolsson-hourly-heatmap-panel/).
+Note that the consumption, cost and price heatmap panels requires the [Hourly heatmap plugin](https://grafana.com/grafana/plugins/marcusolsson-hourly-heatmap-panel/).
 
 If you don't have Tibber Pulse, only the power price metrics will be available.
 
