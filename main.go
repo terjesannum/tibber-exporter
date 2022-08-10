@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/hasura/go-graphql-client"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/terjesannum/tibber-exporter/internal/home"
 	"github.com/terjesannum/tibber-exporter/internal/metrics"
@@ -38,6 +39,7 @@ func main() {
 		time.Sleep(10 * time.Second)
 		os.Exit(1)
 	}
+
 	for _, s := range homesQuery.Viewer.Homes {
 		log.Printf("Found home: %v - %v\n", s.Id, s.AppNickname)
 		if s.CurrentSubscription.PriceInfo.Current.Currency == "" {
@@ -58,9 +60,11 @@ func main() {
 				string(s.Address.Longitude),
 				string(s.CurrentSubscription.PriceInfo.Current.Currency),
 			).Set(1)
+			prometheus.MustRegister(metrics.NewPriceCollector(s.Id.(string), &h.Prices))
 			if s.Features.RealTimeConsumptionEnabled {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
 				go h.SubscribeMeasurements(ctx, token)
+				prometheus.MustRegister(metrics.NewMeasurementCollector(s.Id.(string), &h.Measurements.LiveMeasurement))
 			} else {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}
@@ -80,6 +84,7 @@ func main() {
 			}()
 		}
 	}
+
 	log.Println("Starting http listener")
 	http.Handle("/metrics", promhttp.Handler())
 	err = http.ListenAndServe(":8080", nil)

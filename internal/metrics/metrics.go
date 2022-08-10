@@ -2,6 +2,7 @@ package metrics
 
 import (
 	"log"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -27,38 +28,66 @@ var (
 			"longitude",
 			"currency",
 		})
-	Consumption = promauto.NewGaugeVec(
-		prometheus.GaugeOpts{
-			Name: "tibber_power_consumption",
-			Help: "Current power consumption",
-		},
-		[]string{
-			"home_id",
-		})
 )
 
-type CounterCollector struct {
-	counterDesc *prometheus.Desc
-	value       *float64
+type MeasurementCollector struct {
+	measurements     *tibber.LiveMeasurement
+	consumption      *prometheus.Desc
+	consumptionTotal *prometheus.Desc
+	costTotal        *prometheus.Desc
 }
 
-func (c *CounterCollector) Describe(ch chan<- *prometheus.Desc) {
-	ch <- c.counterDesc
-}
-
-func (c *CounterCollector) Collect(ch chan<- prometheus.Metric) {
-	ch <- prometheus.MustNewConstMetric(
-		c.counterDesc,
-		prometheus.CounterValue,
-		*c.value,
-	)
-}
-
-func NewCounterCollector(name string, help string, homeId string, value *float64) *CounterCollector {
-	return &CounterCollector{
-		counterDesc: prometheus.NewDesc(name, help, nil, prometheus.Labels{"home_id": homeId}),
-		value:       value,
+func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement) *MeasurementCollector {
+	return &MeasurementCollector{
+		measurements: m,
+		consumption: prometheus.NewDesc(
+			"tibber_power_consumption",
+			"Current power consumption",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		consumptionTotal: prometheus.NewDesc(
+			"tibber_power_consumption_day_total",
+			"Total power consumption since midnight",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		costTotal: prometheus.NewDesc(
+			"tibber_power_cost_day_total",
+			"Total power cost since midnight",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
 	}
+}
+
+func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
+	ch <- c.consumption
+	ch <- c.consumptionTotal
+	ch <- c.costTotal
+}
+
+func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
+	timeDiff := time.Now().Sub(c.measurements.Timestamp)
+	if timeDiff.Minutes() > 5 {
+		log.Printf("Measurements to old: %s\n", c.measurements.Timestamp)
+		return
+	}
+	ch <- prometheus.MustNewConstMetric(
+		c.consumption,
+		prometheus.GaugeValue,
+		c.measurements.Power,
+	)
+	ch <- prometheus.MustNewConstMetric(
+		c.consumptionTotal,
+		prometheus.GaugeValue,
+		c.measurements.AccumulatedConsumption,
+	)
+	ch <- prometheus.MustNewConstMetric(
+		c.costTotal,
+		prometheus.GaugeValue,
+		c.measurements.AccumulatedCost,
+	)
 }
 
 type PriceCollector struct {

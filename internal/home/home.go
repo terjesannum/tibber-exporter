@@ -9,8 +9,6 @@ import (
 	"context"
 
 	"github.com/hasura/go-graphql-client"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/terjesannum/tibber-exporter/internal/metrics"
 	"github.com/terjesannum/tibber-exporter/internal/tibber"
 )
 
@@ -32,9 +30,6 @@ func New(id graphql.ID) *Home {
 			"id": id,
 		},
 	}
-	prometheus.MustRegister(metrics.NewPriceCollector(id.(string), &h.Prices))
-	prometheus.MustRegister(metrics.NewCounterCollector("tibber_power_consumption_day_total", "Total power consumption since midnight", id.(string), &h.Measurements.LiveMeasurement.AccumulatedConsumption))
-	prometheus.MustRegister(metrics.NewCounterCollector("tibber_power_cost_day_total", "Total power cost since midnight", id.(string), &h.Measurements.LiveMeasurement.AccumulatedCost))
 	return h
 }
 
@@ -74,11 +69,7 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, token string) {
 		if err != nil {
 			log.Println(err)
 		} else {
-			// set power gauge
 			h.Measurements.LiveMeasurement.Power = m.LiveMeasurement.Power
-			metrics.Consumption.WithLabelValues(
-				h.Id.(string),
-			).Set(h.Measurements.LiveMeasurement.Power)
 			// Each hour tibber seems to adjust readings (to official hourly reading?) and the accumulated values could be a bit lower that the previous.
 			// This causes problems for prometheus counters, so skip those values.
 			if m.LiveMeasurement.AccumulatedConsumption > h.Measurements.LiveMeasurement.AccumulatedConsumption ||
