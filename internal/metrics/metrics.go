@@ -113,7 +113,7 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 		c.measurements.Timestamp,
 		prometheus.MustNewConstMetric(
 			c.consumptionTotal,
-			prometheus.GaugeValue,
+			prometheus.CounterValue,
 			c.measurements.AccumulatedConsumption,
 		),
 	)
@@ -121,7 +121,7 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 		c.measurements.Timestamp,
 		prometheus.MustNewConstMetric(
 			c.costTotal,
-			prometheus.GaugeValue,
+			prometheus.CounterValue,
 			c.measurements.AccumulatedCost,
 		),
 	)
