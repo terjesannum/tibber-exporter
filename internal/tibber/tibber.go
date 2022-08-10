@@ -57,6 +57,13 @@ type LiveMeasurement struct {
 	Power                  float64
 	AccumulatedConsumption float64
 	AccumulatedCost        float64
+	CurrentL1              *float64
+	CurrentL2              *float64
+	CurrentL3              *float64
+	VoltagePhase1          *float64
+	VoltagePhase2          *float64
+	VoltagePhase3          *float64
+	SignalStrength         *float64
 }
 
 var PriceLevel = map[string]int{
@@ -65,4 +72,20 @@ var PriceLevel = map[string]int{
 	"NORMAL":         3,
 	"EXPENSIVE":      4,
 	"VERY_EXPENSIVE": 5,
+}
+
+// Keep timestamp for values not present in every live measurement reading
+type timestampedValue struct {
+	Timestamp time.Time
+	Value     float64
+}
+
+type TimestampedValues struct {
+	CurrentL1      timestampedValue
+	CurrentL2      timestampedValue
+	CurrentL3      timestampedValue
+	VoltagePhase1  timestampedValue
+	VoltagePhase2  timestampedValue
+	VoltagePhase3  timestampedValue
+	SignalStrength timestampedValue
 }

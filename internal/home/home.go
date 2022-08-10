@@ -17,10 +17,11 @@ type Measurements struct {
 }
 
 type Home struct {
-	Id             graphql.ID
-	Prices         tibber.Prices `graphql:"home(id: $id)"`
-	Measurements   Measurements
-	queryVariables map[string]interface{}
+	Id                graphql.ID
+	Prices            tibber.Prices `graphql:"home(id: $id)"`
+	Measurements      Measurements
+	queryVariables    map[string]interface{}
+	TimestampedValues tibber.TimestampedValues
 }
 
 func New(id graphql.ID) *Home {
@@ -85,6 +86,34 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, token string) {
 			} else {
 				log.Printf("Accumulated cost lower than stored value: %f(%s) < %f(%s)\n",
 					m.LiveMeasurement.AccumulatedCost, m.LiveMeasurement.Timestamp, h.Measurements.LiveMeasurement.AccumulatedCost, h.Measurements.LiveMeasurement.Timestamp)
+			}
+			if m.LiveMeasurement.CurrentL1 != nil {
+				h.TimestampedValues.CurrentL1.Timestamp = m.LiveMeasurement.Timestamp
+				h.TimestampedValues.CurrentL1.Value = *m.LiveMeasurement.CurrentL1
+			}
+			if m.LiveMeasurement.CurrentL2 != nil {
+				h.TimestampedValues.CurrentL2.Timestamp = m.LiveMeasurement.Timestamp
+				h.TimestampedValues.CurrentL2.Value = *m.LiveMeasurement.CurrentL2
+			}
+			if m.LiveMeasurement.CurrentL3 != nil {
+				h.TimestampedValues.CurrentL3.Timestamp = m.LiveMeasurement.Timestamp
+				h.TimestampedValues.CurrentL3.Value = *m.LiveMeasurement.CurrentL3
+			}
+			if m.LiveMeasurement.VoltagePhase1 != nil {
+				h.TimestampedValues.VoltagePhase1.Timestamp = m.LiveMeasurement.Timestamp
+				h.TimestampedValues.VoltagePhase1.Value = *m.LiveMeasurement.VoltagePhase1
+			}
+			if m.LiveMeasurement.VoltagePhase2 != nil {
+				h.TimestampedValues.VoltagePhase2.Timestamp = m.LiveMeasurement.Timestamp
+				h.TimestampedValues.VoltagePhase2.Value = *m.LiveMeasurement.VoltagePhase2
+			}
+			if m.LiveMeasurement.VoltagePhase3 != nil {
+				h.TimestampedValues.VoltagePhase3.Timestamp = m.LiveMeasurement.Timestamp
+				h.TimestampedValues.VoltagePhase3.Value = *m.LiveMeasurement.VoltagePhase3
+			}
+			if m.LiveMeasurement.SignalStrength != nil {
+				h.TimestampedValues.SignalStrength.Timestamp = m.LiveMeasurement.Timestamp
+				h.TimestampedValues.SignalStrength.Value = *m.LiveMeasurement.SignalStrength
 			}
 			h.Measurements.LiveMeasurement.Timestamp = m.LiveMeasurement.Timestamp
 		}

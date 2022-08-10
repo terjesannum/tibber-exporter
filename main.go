@@ -64,7 +64,7 @@ func main() {
 			if s.Features.RealTimeConsumptionEnabled {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
 				go h.SubscribeMeasurements(ctx, token)
-				prometheus.MustRegister(metrics.NewMeasurementCollector(s.Id.(string), &h.Measurements.LiveMeasurement))
+				prometheus.MustRegister(metrics.NewMeasurementCollector(s.Id.(string), &h.Measurements.LiveMeasurement, &h.TimestampedValues))
 			} else {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}

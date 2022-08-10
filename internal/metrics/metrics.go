@@ -30,19 +30,26 @@ var (
 		})
 )
 
+const maxAge = 5
+
 type MeasurementCollector struct {
-	measurements     *tibber.LiveMeasurement
-	consumption      *prometheus.Desc
-	consumptionTotal *prometheus.Desc
-	costTotal        *prometheus.Desc
+	measurements      *tibber.LiveMeasurement
+	timestampedValues *tibber.TimestampedValues
+	consumption       *prometheus.Desc
+	consumptionTotal  *prometheus.Desc
+	costTotal         *prometheus.Desc
+	current           *prometheus.Desc
+	voltage           *prometheus.Desc
+	signalStrength    *prometheus.Desc
 }
 
-func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement) *MeasurementCollector {
+func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibber.TimestampedValues) *MeasurementCollector {
 	return &MeasurementCollector{
-		measurements: m,
+		measurements:      m,
+		timestampedValues: tv,
 		consumption: prometheus.NewDesc(
 			"tibber_power_consumption",
-			"Current power consumption",
+			"Power consumption",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
@@ -58,6 +65,24 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement) *Measurem
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
+		current: prometheus.NewDesc(
+			"tibber_current",
+			"Line current",
+			[]string{"line"},
+			prometheus.Labels{"home_id": homeId},
+		),
+		voltage: prometheus.NewDesc(
+			"tibber_voltage",
+			"Phase voltage",
+			[]string{"phase"},
+			prometheus.Labels{"home_id": homeId},
+		),
+		signalStrength: prometheus.NewDesc(
+			"tibber_signal_strength",
+			"Signal strength",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
 	}
 }
 
@@ -65,11 +90,14 @@ func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.consumption
 	ch <- c.consumptionTotal
 	ch <- c.costTotal
+	ch <- c.current
+	ch <- c.voltage
+	ch <- c.signalStrength
 }
 
 func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 	timeDiff := time.Now().Sub(c.measurements.Timestamp)
-	if timeDiff.Minutes() > 5 {
+	if timeDiff.Minutes() > maxAge {
 		log.Printf("Measurements to old: %s\n", c.measurements.Timestamp)
 		return
 	}
@@ -88,6 +116,89 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 		prometheus.GaugeValue,
 		c.measurements.AccumulatedCost,
 	)
+	timeDiff = time.Now().Sub(c.timestampedValues.CurrentL1.Timestamp)
+	if timeDiff.Minutes() < maxAge {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.timestampedValues.CurrentL1.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.current,
+				prometheus.GaugeValue,
+				c.timestampedValues.CurrentL1.Value,
+				"1",
+			),
+		)
+	}
+	timeDiff = time.Now().Sub(c.timestampedValues.CurrentL2.Timestamp)
+	if timeDiff.Minutes() < maxAge {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.timestampedValues.CurrentL2.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.current,
+				prometheus.GaugeValue,
+				c.timestampedValues.CurrentL2.Value,
+				"2",
+			),
+		)
+	}
+	timeDiff = time.Now().Sub(c.timestampedValues.CurrentL3.Timestamp)
+	if timeDiff.Minutes() < maxAge {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.timestampedValues.CurrentL3.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.current,
+				prometheus.GaugeValue,
+				c.timestampedValues.CurrentL3.Value,
+				"3",
+			),
+		)
+	}
+	timeDiff = time.Now().Sub(c.timestampedValues.VoltagePhase1.Timestamp)
+	if timeDiff.Minutes() < maxAge {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.timestampedValues.VoltagePhase1.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.voltage,
+				prometheus.GaugeValue,
+				c.timestampedValues.VoltagePhase1.Value,
+				"1",
+			),
+		)
+	}
+	timeDiff = time.Now().Sub(c.timestampedValues.VoltagePhase2.Timestamp)
+	if timeDiff.Minutes() < maxAge {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.timestampedValues.VoltagePhase2.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.voltage,
+				prometheus.GaugeValue,
+				c.timestampedValues.VoltagePhase2.Value,
+				"2",
+			),
+		)
+	}
+	timeDiff = time.Now().Sub(c.timestampedValues.VoltagePhase3.Timestamp)
+	if timeDiff.Minutes() < maxAge {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.timestampedValues.VoltagePhase3.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.voltage,
+				prometheus.GaugeValue,
+				c.timestampedValues.VoltagePhase3.Value,
+				"3",
+			),
+		)
+	}
+	timeDiff = time.Now().Sub(c.timestampedValues.SignalStrength.Timestamp)
+	if timeDiff.Minutes() < maxAge {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.timestampedValues.SignalStrength.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.signalStrength,
+				prometheus.GaugeValue,
+				c.timestampedValues.SignalStrength.Value,
+			),
+		)
+	}
 }
 
 type PriceCollector struct {
@@ -102,8 +213,8 @@ func NewPriceCollector(homeId string, prices *tibber.Prices) *PriceCollector {
 	return &PriceCollector{
 		homeId:     homeId,
 		prices:     prices,
-		price:      prometheus.NewDesc("tibber_power_price", "Current power price", []string{"type"}, prometheus.Labels{"home_id": homeId}),
-		priceLevel: prometheus.NewDesc("tibber_power_price_level", "Current power price level", nil, prometheus.Labels{"home_id": homeId}),
+		price:      prometheus.NewDesc("tibber_power_price", "Power price", []string{"type"}, prometheus.Labels{"home_id": homeId}),
+		priceLevel: prometheus.NewDesc("tibber_power_price_level", "Power price level", nil, prometheus.Labels{"home_id": homeId}),
 	}
 }
 
