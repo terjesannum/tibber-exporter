@@ -68,9 +68,9 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, token string) {
 		return err
 	})
 	defer subscriber.Close()
-	subscriptionId, err := subscriber.Subscribe(&h.Measurements, h.queryVariables, func(dataValue *json.RawMessage, errValue error) error {
+	subscriptionId, err := subscriber.Subscribe(&h.Measurements, h.queryVariables, func(dataValue []byte, errValue error) error {
 		var m Measurements
-		err := json.Unmarshal(*dataValue, &m)
+		err := json.Unmarshal(dataValue, &m)
 		if err != nil {
 			log.Println(err)
 		} else {

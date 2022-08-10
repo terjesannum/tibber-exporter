@@ -1,4 +1,4 @@
-FROM golang:1.18.5-alpine as builder
+FROM golang:1.19.0-alpine as builder
 
 WORKDIR /workspace
 COPY go.* ./
@@ -8,7 +8,7 @@ COPY . /workspace
 
 RUN CGO_ENABLED=0 go build -a -o tibber-exporter .
 
-FROM alpine:3.15.5
+FROM alpine:3.16.2
 
 LABEL org.opencontainers.image.authors="Terje Sannum <terje@offpiste.org>" \
       org.opencontainers.image.source="https://github.com/terjesannum/tibber-exporter"
