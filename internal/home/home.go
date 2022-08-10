@@ -35,11 +35,14 @@ func New(id graphql.ID) *Home {
 }
 
 func (h *Home) UpdatePrices(ctx context.Context, client *graphql.Client) {
+	var prices tibber.Prices
 	log.Printf("Updating prices for %v\n", h.Id)
-	err := client.Query(ctx, &h.Prices, h.queryVariables)
+	err := client.Query(ctx, &prices, h.queryVariables)
 	if err != nil {
 		log.Println(err)
+		return
 	}
+	h.Prices = prices
 }
 
 func (h *Home) SubscribeMeasurements(ctx context.Context, token string) {
