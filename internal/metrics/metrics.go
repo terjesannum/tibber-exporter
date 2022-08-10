@@ -101,20 +101,29 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 		log.Printf("Measurements to old: %s\n", c.measurements.Timestamp)
 		return
 	}
-	ch <- prometheus.MustNewConstMetric(
-		c.consumption,
-		prometheus.GaugeValue,
-		c.measurements.Power,
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.consumption,
+			prometheus.GaugeValue,
+			c.measurements.Power,
+		),
 	)
-	ch <- prometheus.MustNewConstMetric(
-		c.consumptionTotal,
-		prometheus.GaugeValue,
-		c.measurements.AccumulatedConsumption,
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.consumptionTotal,
+			prometheus.GaugeValue,
+			c.measurements.AccumulatedConsumption,
+		),
 	)
-	ch <- prometheus.MustNewConstMetric(
-		c.costTotal,
-		prometheus.GaugeValue,
-		c.measurements.AccumulatedCost,
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.costTotal,
+			prometheus.GaugeValue,
+			c.measurements.AccumulatedCost,
+		),
 	)
 	timeDiff = time.Now().Sub(c.timestampedValues.CurrentL1.Timestamp)
 	if timeDiff.Minutes() < maxAge {
