@@ -1130,7 +1130,7 @@
       "type": "marcusolsson-hourly-heatmap-panel"
     }
   ],
-  "refresh": false,
+  "refresh": "1m",
   "schemaVersion": 36,
   "style": "dark",
   "tags": [],
@@ -1182,6 +1182,6 @@
   "timezone": "",
   "title": "Tibber",
   "uid": "5rT8QDiVk",
-  "version": 13,
+  "version": 2,
   "weekStart": ""
 }
