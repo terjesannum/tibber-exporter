@@ -17,7 +17,7 @@ If you don't have Tibber Pulse, only the power price metrics will be available.
 Docker image is available on [ghcr.io](https://github.com/terjesannum/tibber-exporter/pkgs/container/tibber-exporter).
 
 ```sh
-docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:3
+docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:4
 ```
 
 Go to [developer.tibber.com](https://developer.tibber.com/) to find your `TIBBER_TOKEN`.

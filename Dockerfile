@@ -10,7 +10,10 @@ RUN CGO_ENABLED=0 go build -a -o tibber-exporter .
 
 FROM alpine:3.16.2
 
-LABEL org.opencontainers.image.authors="Terje Sannum <terje@offpiste.org>" \
+LABEL org.opencontainers.image.title="tibber-exporter" \
+      org.opencontainers.image.description="Prometheus exporter for Tibber power usage and costs" \
+      org.opencontainers.image.authors="Terje Sannum <terje@offpiste.org>" \
+      org.opencontainers.image.url="https://github.com/terjesannum/tibber-exporter" \
       org.opencontainers.image.source="https://github.com/terjesannum/tibber-exporter"
 
 WORKDIR /
