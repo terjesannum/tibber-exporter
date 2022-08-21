@@ -167,7 +167,7 @@
           },
           "decimals": 1,
           "mappings": [],
-          "max": 32,
+          "max": 48,
           "min": 0,
           "noValue": "0",
           "thresholds": {
@@ -179,7 +179,7 @@
               },
               {
                 "color": "red",
-                "value": 28
+                "value": 40
               }
             ]
           },
@@ -238,7 +238,7 @@
           },
           "decimals": 1,
           "mappings": [],
-          "max": 32,
+          "max": 48,
           "min": 0,
           "noValue": "0",
           "thresholds": {
@@ -250,7 +250,7 @@
               },
               {
                 "color": "red",
-                "value": 28
+                "value": 40
               }
             ]
           },
@@ -309,7 +309,7 @@
           },
           "decimals": 1,
           "mappings": [],
-          "max": 32,
+          "max": 48,
           "min": 0,
           "noValue": "0",
           "thresholds": {
@@ -321,7 +321,7 @@
               },
               {
                 "color": "red",
-                "value": 28
+                "value": 40
               }
             ]
           },
@@ -398,7 +398,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 4,
         "x": 13,
         "y": 0
@@ -593,10 +593,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 4,
         "x": 13,
-        "y": 4
+        "y": 3
       },
       "id": 16,
       "options": {
@@ -715,7 +715,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(tibber_power_consumption_day_total{home_id=\"$home\"}[5m]) * 60 * 60",
+          "expr": "irate(tibber_power_consumption_day_total{home_id=\"$home\"}[$__rate_interval]) * 60 * 60",
           "legendFormat": "Power consumption",
           "range": true,
           "refId": "A"
@@ -1228,7 +1228,7 @@
     ]
   },
   "time": {
-    "from": "now-7d",
+    "from": "now-14d",
     "to": "now"
   },
   "timepicker": {
@@ -1248,6 +1248,6 @@
   "timezone": "",
   "title": "Tibber",
   "uid": "5rT8QDiVk",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }
