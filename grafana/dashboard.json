@@ -501,6 +501,7 @@
         "y": 0
       },
       "id": 11,
+      "maxDataPoints": 10000,
       "options": {
         "from": "0",
         "legendGradientQuality": "high",
@@ -857,6 +858,7 @@
         "y": 7
       },
       "id": 13,
+      "maxDataPoints": 10000,
       "options": {
         "from": "0",
         "legendGradientQuality": "high",
@@ -1107,6 +1109,7 @@
         "y": 14
       },
       "id": 17,
+      "maxDataPoints": 10000,
       "options": {
         "from": "0",
         "legendGradientQuality": "high",
