@@ -612,6 +612,9 @@
           "fields": "",
           "values": false
         },
+        "text": {
+          "valueSize": 40
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.0.5",
