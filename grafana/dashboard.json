@@ -100,7 +100,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
@@ -174,7 +174,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
@@ -245,7 +245,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
@@ -316,7 +316,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
@@ -384,12 +384,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -577,7 +573,7 @@
                 "value": 2
               },
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": 3
               },
               {
@@ -692,7 +688,23 @@
           },
           "unit": "kwatt"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Power consumption"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -744,12 +756,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -939,7 +947,53 @@
           },
           "unit": "kr"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Price per kWh"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Price inc. tax per kWh"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Price per kWh inc. tax"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -967,9 +1021,21 @@
           },
           "editorMode": "code",
           "expr": "tibber_power_price{home_id=\"$home\",type=\"total\"}",
-          "legendFormat": "Price per kWh",
+          "legendFormat": "Price per kWh inc. tax",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "tibber_power_price{home_id=\"$home\",type=\"energy\"}",
+          "hide": false,
+          "legendFormat": "Price per kWh",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Price",
@@ -991,15 +1057,15 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
-                "color": "#EAB839",
+                "color": "semi-dark-orange",
                 "value": 40
               },
               {
-                "color": "red",
+                "color": "semi-dark-red",
                 "value": 80
               }
             ]
@@ -1151,7 +1217,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-green",
                 "value": null
               }
             ]
