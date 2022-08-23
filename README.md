@@ -19,7 +19,7 @@ If you don't have a device for live measurements, only the power price metrics w
 Docker image is available on [ghcr.io](https://github.com/terjesannum/tibber-exporter/pkgs/container/tibber-exporter).
 
 ```sh
-docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:4
+docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:5
 ```
 
 Go to [developer.tibber.com](https://developer.tibber.com/) to find your `TIBBER_TOKEN`.
@@ -37,6 +37,15 @@ tibber_home_info{address1="Bedringens vei 1",address2="",address3="",city="OSLO"
 # HELP tibber_power_consumption Power consumption
 # TYPE tibber_power_consumption gauge
 tibber_power_consumption{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 47 1660135437500
+# HELP tibber_power_consumption_day_avg Average power consumtion since midnight
+# TYPE tibber_power_consumption_day_avg gauge
+tibber_power_consumption_day_avg{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 218.7 1660135437500
+# HELP tibber_power_consumption_day_max Maximum power consumtion since midnight
+# TYPE tibber_power_consumption_day_max gauge
+tibber_power_consumption_day_max{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 2116 1660135437500
+# HELP tibber_power_consumption_day_min Minimum power consumtion since midnight
+# TYPE tibber_power_consumption_day_min gauge
+tibber_power_consumption_day_min{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 44 1660135437500
 # HELP tibber_power_consumption_day_total Total power consumption since midnight
 # TYPE tibber_power_consumption_day_total counter
 tibber_power_consumption_day_total{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 3.313674 1660135437500
