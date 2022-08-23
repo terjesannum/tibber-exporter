@@ -36,6 +36,9 @@ type MeasurementCollector struct {
 	measurements      *tibber.LiveMeasurement
 	timestampedValues *tibber.TimestampedValues
 	consumption       *prometheus.Desc
+	consumptionMin    *prometheus.Desc
+	consumptionMax    *prometheus.Desc
+	consumptionAvg    *prometheus.Desc
 	consumptionTotal  *prometheus.Desc
 	costTotal         *prometheus.Desc
 	current           *prometheus.Desc
@@ -50,6 +53,24 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 		consumption: prometheus.NewDesc(
 			"tibber_power_consumption",
 			"Power consumption",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		consumptionMin: prometheus.NewDesc(
+			"tibber_power_consumption_day_min",
+			"Minimum power consumtion since midnight",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		consumptionMax: prometheus.NewDesc(
+			"tibber_power_consumption_day_max",
+			"Maximum power consumtion since midnight",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		consumptionAvg: prometheus.NewDesc(
+			"tibber_power_consumption_day_avg",
+			"Average power consumtion since midnight",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
@@ -88,6 +109,9 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 
 func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.consumption
+	ch <- c.consumptionMin
+	ch <- c.consumptionMax
+	ch <- c.consumptionAvg
 	ch <- c.consumptionTotal
 	ch <- c.costTotal
 	ch <- c.current
@@ -107,6 +131,30 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 			c.consumption,
 			prometheus.GaugeValue,
 			c.measurements.Power,
+		),
+	)
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.consumptionMin,
+			prometheus.GaugeValue,
+			c.measurements.MinPower,
+		),
+	)
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.consumptionMax,
+			prometheus.GaugeValue,
+			c.measurements.MaxPower,
+		),
+	)
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.consumptionAvg,
+			prometheus.GaugeValue,
+			c.measurements.AveragePower,
 		),
 	)
 	ch <- prometheus.NewMetricWithTimestamp(

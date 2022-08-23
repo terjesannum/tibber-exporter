@@ -55,6 +55,9 @@ type Prices struct {
 type LiveMeasurement struct {
 	Timestamp              time.Time
 	Power                  float64
+	MinPower               float64
+	MaxPower               float64
+	AveragePower           float64
 	AccumulatedConsumption float64
 	AccumulatedCost        float64
 	CurrentL1              *float64
