@@ -6,8 +6,7 @@ Monitor your power usage and costs with Prometheus and Grafana.
 
 ## Description
 
-This prometheus exporter will connect to the Tibber API, subscribe to updates from [Tibber Pulse](https://tibber.com/no/pulse)
-or [Watty](https://tibber.com/se/store/produkt/watty-tibber) and make the metrics available for Prometheus.
+This prometheus exporter will connect to the Tibber API, subscribe to updates from [Tibber Pulse](https://tibber.com/no/pulse) or [Watty](https://tibber.com/se/store/produkt/watty-tibber) and make the metrics available for Prometheus.
 
 See the provided [Grafana dashboard](grafana/dashboard.json) for examples on how they can be used.  
 Note that the consumption, cost and price heatmap panels requires the [Hourly heatmap plugin](https://grafana.com/grafana/plugins/marcusolsson-hourly-heatmap-panel/).
@@ -24,7 +23,29 @@ docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesan
 
 Go to [developer.tibber.com](https://developer.tibber.com/) to find your `TIBBER_TOKEN`.
 
+## Prometheus
+
+Prometheus need to be configured to scrape the exporter, so add a scrape job to `/etc/prometheus/prometheus.yml`:
+```
+scrape_configs:
+
+  - job_name: "tibber-exporter"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["localhost:8080"]
+```
+
+How often the data is updated depends on your energy meter, look at the logs from the exporter to see how often it receives updates and adjust the scrape interval. Shorter scrape interval generates more data, so consider a higher scrape interval if you only use a dashboard with a wide time range and don't need "live" updates.
+
+Also remember that Prometheus is designed for monitoring and not precise calculation, so don't expect the result of the queries to excactly match your electricity bill.
+
+## Grafana
+
+Import the [dashboard](grafana/dashboard.json) and select your Prometheus datasource. The dashboard is also available for import from [grafana.com](https://grafana.com/grafana/dashboards/16804-tibber/).
+
 ## Metrics
+
+Example of metrics provided by this exporter:
 
 ```
 # HELP tibber_current Line current
