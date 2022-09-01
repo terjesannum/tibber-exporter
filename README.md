@@ -35,13 +35,13 @@ scrape_configs:
       - targets: ["localhost:8080"]
 ```
 
-How often the data is updated depends on your energy meter, look at the logs from the exporter to see how often it receives updates and adjust the scrape interval. Shorter scrape interval generates more data, so consider a higher scrape interval if you only use a dashboard with a wide time range and don't need "live" updates.
+How often the data is updated depends on your energy meter. Look at the logs from the exporter to see how often it receives updates, and adjust the scrape interval. Shorter scrape interval generates more data, so consider a higher scrape interval if you only use a dashboard with a wide time range and don't need "live" updates.
 
 Also remember that Prometheus is designed for monitoring and not precise calculation, so don't expect the result of the queries to excactly match your electricity bill.
 
 ## Grafana
 
-Import the [dashboard](grafana/dashboard.json) and select your Prometheus datasource. The dashboard is also available for import from [grafana.com](https://grafana.com/grafana/dashboards/16804-tibber/).
+Import the [dashboard](grafana/dashboard.json) or use id `16804` and import from [grafana.com](https://grafana.com/grafana/dashboards/16804-tibber/). Then select the Prometheus datasource that scrapes the exporter.
 
 ## Metrics
 
