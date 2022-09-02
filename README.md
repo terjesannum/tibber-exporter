@@ -17,11 +17,24 @@ If you don't have a device for live measurements, only the power price metrics w
 
 Docker image is available on [ghcr.io](https://github.com/terjesannum/tibber-exporter/pkgs/container/tibber-exporter).
 
+A `TIBBER_TOKEN` is required to use the Tibber API, go to [developer.tibber.com](https://developer.tibber.com/) to find yours.
+
+### Docker compose
+
+If you don't already run Grafana and Prometheus, you can try a complete setup with `docker compose`.
+
+```sh
+cd docker-compose
+TIBBER_TOKEN=... docker compose up
+```
+
+Then go to http://localhost:3000/ and find the dashboard in the General folder.
+
+### Standalone
+
 ```sh
 docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:5
 ```
-
-Go to [developer.tibber.com](https://developer.tibber.com/) to find your `TIBBER_TOKEN`.
 
 ## Prometheus
 
@@ -35,7 +48,7 @@ scrape_configs:
       - targets: ["localhost:8080"]
 ```
 
-How often the data is updated depends on your energy meter. Look at the logs from the exporter to see how often it receives updates, and adjust the scrape interval. Shorter scrape interval generates more data, so consider a higher scrape interval if you only use a dashboard with a wide time range and don't need "live" updates.
+How often the data is updated depends on your energy meter. Look at the logs from the exporter to see how often it receives updates, and adjust the scrape interval. Shorter scrape interval generates more data, so consider scraping less frequent if you only use a dashboard with a wide time range and don't need "live" updates.
 
 Also remember that Prometheus is designed for monitoring and not precise calculation, so don't expect the result of the queries to excactly match your electricity bill.
 

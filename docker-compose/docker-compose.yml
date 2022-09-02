@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+
+  tibber-exporter:
+    image: ghcr.io/terjesannum/tibber-exporter:5
+    ports:
+      - "8080:8080"
+    networks:
+      - tibber
+    environment:
+      TIBBER_TOKEN: $TIBBER_TOKEN
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:v2.38.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - tibber
+    restart: always
+
+  grafana:
+    image: grafana/grafana:9.1.2
+    volumes:
+      - ./datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml
+      - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ../grafana/dashboard.json:/dashboard.json
+      - ./grafana.sh:/grafana.sh
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - tibber
+    entrypoint:
+      - /grafana.sh
+    environment:
+      GF_INSTALL_PLUGINS: marcusolsson-hourly-heatmap-panel 2.0.1
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Editor
+    restart: always
+    
+networks:
+  tibber: {}
+
+volumes:
+  grafana_data: {}
+  prometheus_data: {}
