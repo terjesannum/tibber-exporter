@@ -33,7 +33,7 @@ Then go to http://localhost:3000/ and find the dashboard in the General folder.
 ### Standalone
 
 ```sh
-docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:5
+docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:latest
 ```
 
 ## Prometheus

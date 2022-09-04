@@ -3,7 +3,7 @@ version: "3.9"
 services:
 
   tibber-exporter:
-    image: ghcr.io/terjesannum/tibber-exporter:5
+    image: ghcr.io/terjesannum/tibber-exporter:latest
     ports:
       - "8080:8080"
     networks:
