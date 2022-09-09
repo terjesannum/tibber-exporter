@@ -23,10 +23,6 @@ var (
 	homesQuery tibber.HomesQuery
 )
 
-func hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Tibber prometheus exporter")
-}
-
 func main() {
 	ctx := context.Background()
 
@@ -91,7 +87,9 @@ func main() {
 	}
 
 	log.Println("Starting http listener")
-	http.HandleFunc("/", hello)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Tibber prometheus exporter")
+	})
 	http.Handle("/metrics", promhttp.Handler())
 	err = http.ListenAndServe(":8080", nil)
 	log.Printf("Error: %v", err)
