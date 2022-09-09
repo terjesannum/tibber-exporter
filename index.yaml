@@ -1,0 +1,22 @@
+apiVersion: v1
+entries:
+  tibber-exporter:
+  - apiVersion: v2
+    created: "2022-09-09T16:18:24.786547056Z"
+    description: Helm chart for Tibber prometheus exporter
+    digest: 44ff81c5fdc7f1b1a6c0183d6887a20c357a49f408be37e84bdaa38995e8894e
+    home: https://github.com/terjesannum/tibber-exporter
+    keywords:
+    - tibber
+    - prometheus
+    - monitoring
+    maintainers:
+    - email: terje@offpiste.org
+      name: Terje Sannum
+      url: https://github.com/terjesannum
+    name: tibber-exporter
+    type: application
+    urls:
+    - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.0.0/tibber-exporter-1.0.0.tgz
+    version: 1.0.0
+generated: "2022-09-09T16:18:24.786555256Z"
