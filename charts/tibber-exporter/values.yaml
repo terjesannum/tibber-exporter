@@ -1,0 +1,36 @@
+tibberToken: ""
+
+podMonitor:
+  enabled: false
+  labels: {}
+  interval: # 5s
+  scrapeTimeout: # 10s
+  
+replicaCount: 1
+
+image:
+  repository: ghcr.io/terjesannum/tibber-exporter
+  tag: latest
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65532
+  allowPrivilegeEscalation: false
+
+resources: {}
+  # limits:
+  #   cpu: 20m
+  #   memory: 32Mi
+  # requests:
+  #   cpu: 10m
+  #   memory: 32Mi
