@@ -1,18 +1,19 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "tibber-exporter.fullname" . }}
   labels:
     {{- include "tibber-exporter.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "tibber-exporter.fullname" . }}
+  replicas: 1
   selector:
     matchLabels:
       {{- include "tibber-exporter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
-        {{- if not .Values.podMonitor.enabled }}
+        {{- if not .Values.serviceMonitor.enabled }}
         prometheus.io/scrape: 'true'
         {{- end }}
         {{- if .Values.podAnnotations }}

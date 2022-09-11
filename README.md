@@ -45,10 +45,10 @@ Then install the helm chart:
 helm install tibber-exporter tibber-exporter/tibber-exporter --set tibberToken=...
 ```
 
-This with install the exporter with the `prometheus.io/scrape` annotation set to `true`. If you run the [Prometheus operator](https://github.com/prometheus-operator/prometheus-operator), install with `podMonitor.enabled=true` to create a `PodMonitor` instead:
+This with install the exporter with the `prometheus.io/scrape` annotation set to `true`. If you run the [Prometheus operator](https://github.com/prometheus-operator/prometheus-operator), install with `serviceMonitor.enabled=true` to create a `ServiceMonitor` instead:
 
 ```
-helm install tibber-exporter tibber-exporter/tibber-exporter --set tibberToken=... --set podMonitor.enabled=true
+helm install tibber-exporter tibber-exporter/tibber-exporter --set tibberToken=... --set serviceMonitor.enabled=true
 ```
 
 ### Standalone
