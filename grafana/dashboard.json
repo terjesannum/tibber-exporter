@@ -146,7 +146,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_power_consumption{home_id=\"$home\"}",
+          "expr": "avg(tibber_power_consumption{home_id=\"$home\"})",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -217,7 +217,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_current{home_id=\"$home\",line=\"1\"} or on() vector(0)",
+          "expr": "avg(tibber_current{home_id=\"$home\",line=\"1\"}) or on() vector(0)",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -288,7 +288,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_current{home_id=\"$home\",line=\"2\"} or on() vector(0)",
+          "expr": "avg(tibber_current{home_id=\"$home\",line=\"2\"}) or on() vector(0)",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -359,7 +359,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_current{home_id=\"$home\",line=\"3\"} or on() vector(0)",
+          "expr": "avg(tibber_current{home_id=\"$home\",line=\"3\"}) or on() vector(0)",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -424,7 +424,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_power_price{home_id=\"$home\", type=\"total\"}",
+          "expr": "avg(tibber_power_price{home_id=\"$home\", type=\"total\"})",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -513,7 +513,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "increase(tibber_power_consumption_day_total{home_id=\"$home\"}[1h]) * 1000",
+          "expr": "sum(increase(tibber_power_consumption_day_total{home_id=\"$home\"}[1h])) * 1000",
           "refId": "A"
         }
       ],
@@ -622,7 +622,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_power_price_level{home_id=\"$home\"}",
+          "expr": "round(avg(tibber_power_price_level{home_id=\"$home\"}))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{level}}",
@@ -731,7 +731,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "irate(tibber_power_consumption_day_total{home_id=\"$home\"}[$__rate_interval]) * 60 * 60",
+          "expr": "sum(irate(tibber_power_consumption_day_total{home_id=\"$home\"}[$__rate_interval])) * 60 * 60",
           "legendFormat": "Power consumption",
           "range": true,
           "refId": "A"
@@ -796,7 +796,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_power_consumption_day_total{home_id=\"$home\"}",
+          "expr": "avg(tibber_power_consumption_day_total{home_id=\"$home\"})",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -858,7 +858,7 @@
               }
             ]
           },
-          "unit": "currencyNOK"
+          "unit": "kr"
         },
         "overrides": []
       },
@@ -885,7 +885,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "increase(tibber_power_cost_day_total{home_id=\"$home\"}[1h])",
+          "expr": "sum(increase(tibber_power_cost_day_total{home_id=\"$home\"}[1h]))",
           "refId": "A"
         }
       ],
@@ -948,13 +948,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_power_consumption_day_avg{home_id=\"$home\"}",
+          "expr": "avg(tibber_power_consumption_day_avg{home_id=\"$home\"})",
           "instant": true,
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Average",
+      "title": "Avg today",
       "type": "stat"
     },
     {
@@ -1013,13 +1013,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_power_consumption_day_max{home_id=\"$home\"}",
+          "expr": "avg(tibber_power_consumption_day_max{home_id=\"$home\"})",
           "instant": true,
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Max",
+      "title": "Max today",
       "type": "stat"
     },
     {
@@ -1150,7 +1150,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "tibber_power_price{home_id=\"$home\",type=\"total\"}",
+          "expr": "avg(tibber_power_price{home_id=\"$home\",type=\"total\"})",
           "legendFormat": "Price inc. tax",
           "range": true,
           "refId": "A"
@@ -1161,7 +1161,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "tibber_power_price{home_id=\"$home\",type=\"energy\"}",
+          "expr": "avg(tibber_power_price{home_id=\"$home\",type=\"energy\"})",
           "hide": false,
           "legendFormat": "Price per kWh",
           "range": true,
@@ -1235,7 +1235,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "tibber_power_cost_day_total{home_id=\"$home\"}",
+          "expr": "avg(tibber_power_cost_day_total{home_id=\"$home\"})",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -1297,7 +1297,7 @@
               }
             ]
           },
-          "unit": "currencyNOK"
+          "unit": "kr"
         },
         "overrides": []
       },
@@ -1324,7 +1324,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "tibber_power_price{home_id=\"$home\",type=\"total\"}",
+          "expr": "avg(tibber_power_price{home_id=\"$home\",type=\"total\"})",
           "refId": "A"
         }
       ],
@@ -1387,7 +1387,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "increase(tibber_power_cost_day_total{home_id=\"$home\"}[$__range])",
+          "expr": "sum(increase(tibber_power_cost_day_total{home_id=\"$home\"}[$__range]))",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -1450,6 +1450,6 @@
   "timezone": "",
   "title": "Tibber",
   "uid": "5rT8QDiVk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
