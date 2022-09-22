@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tibber-exporter
-version: 1.2.1
+version: 1.2.2
 appVersion: 9
 description: Helm chart for Tibber prometheus exporter
 type: application
