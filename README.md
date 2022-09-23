@@ -128,3 +128,5 @@ tibber_voltage{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",phase="3"} 234.9 1
 ### Consider becoming a Tibber customer?
 
 I would be happy if you use [this referral code](https://invite.tibber.com/qandobma). That will give each of us a bonus to use on stuff like Tibber Pulse :smile:
+
+Or register the code `qandobma` directly in the app if you signed up without an invite.
