@@ -6,6 +6,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/terjesannum/tibber-exporter/internal/home"
 	"github.com/terjesannum/tibber-exporter/internal/tibber"
 )
 
@@ -258,50 +259,100 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 }
 
-type PriceCollector struct {
-	homeId     string
-	prices     *tibber.Prices
-	price      *prometheus.Desc
-	priceLevel *prometheus.Desc
+type HomeCollector struct {
+	home                    *home.Home
+	price                   *prometheus.Desc
+	priceLevel              *prometheus.Desc
+	previousHourConsumption *prometheus.Desc
+	previousHourCost        *prometheus.Desc
+	previousDayConsumption  *prometheus.Desc
+	previousDayCost         *prometheus.Desc
 }
 
-func NewPriceCollector(homeId string, prices *tibber.Prices) *PriceCollector {
-	log.Printf("Creating price collector for home %s\n", homeId)
-	return &PriceCollector{
-		homeId:     homeId,
-		prices:     prices,
-		price:      prometheus.NewDesc("tibber_power_price", "Power price", []string{"type"}, prometheus.Labels{"home_id": homeId}),
-		priceLevel: prometheus.NewDesc("tibber_power_price_level", "Power price level", nil, prometheus.Labels{"home_id": homeId}),
+func NewHomeCollector(home *home.Home) *HomeCollector {
+	log.Printf("Creating home collector for home %s\n", home.Id)
+	return &HomeCollector{
+		home:                    home,
+		price:                   prometheus.NewDesc("tibber_power_price", "Power price", []string{"type"}, prometheus.Labels{"home_id": home.Id.(string)}),
+		priceLevel:              prometheus.NewDesc("tibber_power_price_level", "Power price level", nil, prometheus.Labels{"home_id": home.Id.(string)}),
+		previousHourConsumption: prometheus.NewDesc("tibber_power_consumption_previous_hour", "Power consumption previous hour", nil, prometheus.Labels{"home_id": home.Id.(string)}),
+		previousHourCost:        prometheus.NewDesc("tibber_power_cost_previous_hour", "Power cost previous hour", nil, prometheus.Labels{"home_id": home.Id.(string)}),
+		previousDayConsumption:  prometheus.NewDesc("tibber_power_consumption_previous_day", "Power consumption previous day", nil, prometheus.Labels{"home_id": home.Id.(string)}),
+		previousDayCost:         prometheus.NewDesc("tibber_power_cost_previous_day", "Power cost previous day", nil, prometheus.Labels{"home_id": home.Id.(string)}),
 	}
 }
 
-func (c *PriceCollector) Describe(ch chan<- *prometheus.Desc) {
+func (c *HomeCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.price
 	ch <- c.priceLevel
+	ch <- c.previousHourConsumption
+	ch <- c.previousHourCost
+	ch <- c.previousDayConsumption
+	ch <- c.previousDayCost
 }
 
-func (c *PriceCollector) Collect(ch chan<- prometheus.Metric) {
+func (c *HomeCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(
 		c.price,
 		prometheus.GaugeValue,
-		c.prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Total,
+		c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Total,
 		"total",
 	)
 	ch <- prometheus.MustNewConstMetric(
 		c.price,
 		prometheus.GaugeValue,
-		c.prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Energy,
+		c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Energy,
 		"energy",
 	)
 	ch <- prometheus.MustNewConstMetric(
 		c.price,
 		prometheus.GaugeValue,
-		c.prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Tax,
+		c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Tax,
 		"tax",
 	)
 	ch <- prometheus.MustNewConstMetric(
 		c.priceLevel,
 		prometheus.GaugeValue,
-		float64(tibber.PriceLevel[string(c.prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Level)]),
+		float64(tibber.PriceLevel[string(c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Level)]),
 	)
+	if c.home.PreviousHour.Consumption != nil {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.home.PreviousHour.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.previousHourConsumption,
+				prometheus.GaugeValue,
+				*c.home.PreviousHour.Consumption,
+			),
+		)
+	}
+	if c.home.PreviousHour.Cost != nil {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.home.PreviousHour.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.previousHourCost,
+				prometheus.GaugeValue,
+				*c.home.PreviousHour.Cost,
+			),
+		)
+	}
+	if c.home.PreviousDay.Consumption != nil {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.home.PreviousDay.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.previousDayConsumption,
+				prometheus.GaugeValue,
+				*c.home.PreviousDay.Consumption,
+			),
+		)
+	}
+	if c.home.PreviousDay.Cost != nil {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.home.PreviousDay.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.previousDayCost,
+				prometheus.GaugeValue,
+				*c.home.PreviousDay.Cost,
+			),
+		)
+	}
 }

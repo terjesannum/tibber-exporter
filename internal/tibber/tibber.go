@@ -92,3 +92,29 @@ type TimestampedValues struct {
 	VoltagePhase3  timestampedValue
 	SignalStrength timestampedValue
 }
+
+type EnergyResolution string
+
+const ResolutionHourly EnergyResolution = "HOURLY"
+const ResolutionDaily EnergyResolution = "DAILY"
+
+type PreviousQuery struct {
+	Viewer struct {
+		Home struct {
+			Consumption struct {
+				Nodes []struct {
+					From        time.Time
+					To          time.Time
+					Consumption *float64
+					Cost        *float64
+				}
+			} `graphql:"consumption(resolution: $resolution, last: 1)"`
+		} `graphql:"home(id: $id)"`
+	}
+}
+
+type PreviousPower struct {
+	Timestamp   time.Time
+	Consumption *float64
+	Cost        *float64
+}

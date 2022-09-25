@@ -31,9 +31,9 @@ func main() {
 		AccessToken: token,
 		TokenType:   "Bearer",
 	}))
-	tibber := graphql.NewClient("https://api.tibber.com/v1-beta/gql", oauth)
+	client := graphql.NewClient("https://api.tibber.com/v1-beta/gql", oauth)
 
-	err := tibber.Query(ctx, &homesQuery, nil)
+	err := client.Query(ctx, &homesQuery, nil)
 	if err != nil {
 		log.Printf("Error getting homes: %v", err)
 		log.Println("Exiting...")
@@ -61,7 +61,7 @@ func main() {
 				string(s.Address.Longitude),
 				string(s.CurrentSubscription.PriceInfo.Current.Currency),
 			).Set(1)
-			prometheus.MustRegister(metrics.NewPriceCollector(s.Id.(string), &h.Prices))
+			prometheus.MustRegister(metrics.NewHomeCollector(h))
 			if s.Features.RealTimeConsumptionEnabled {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
 				go h.SubscribeMeasurements(ctx, token)
@@ -69,14 +69,16 @@ func main() {
 			} else {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}
-			h.UpdatePrices(ctx, tibber)
+			h.UpdatePrices(ctx, client)
 			ticker := time.NewTicker(time.Minute)
 			quit := make(chan struct{})
 			go func() {
 				for {
 					select {
 					case <-ticker.C:
-						h.UpdatePrices(ctx, tibber)
+						h.UpdatePrices(ctx, client)
+						h.UpdatePrevious(ctx, client, tibber.ResolutionHourly)
+						h.UpdatePrevious(ctx, client, tibber.ResolutionDaily)
 					case <-quit:
 						ticker.Stop()
 						return

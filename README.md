@@ -11,7 +11,7 @@ This prometheus exporter will connect to the Tibber API, subscribe to updates fr
 See the provided [Grafana dashboard](grafana/dashboard.json) for examples on how they can be used.  
 Note that the consumption, cost and price heatmap panels requires the [Hourly heatmap plugin](https://grafana.com/grafana/plugins/marcusolsson-hourly-heatmap-panel/).
 
-If you don't have a device for live measurements, only the power price metrics will be available.
+If you don't have a device for live measurements, only the power price metrics will be available on that dashboard, but it should be possible to create a dashboard with historic consumption and cost using the `..._previous_day` and `..._previous_hour` metrics. The availability of those metrics may vary between grid companies.
 
 ## Running
 
@@ -104,9 +104,21 @@ tibber_power_consumption_day_min{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"}
 # HELP tibber_power_consumption_day_total Total power consumption since midnight
 # TYPE tibber_power_consumption_day_total counter
 tibber_power_consumption_day_total{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 3.313674 1660135437500
+# HELP tibber_power_consumption_previous_day Power consumption previous day
+# TYPE tibber_power_consumption_previous_day gauge
+tibber_power_consumption_previous_day{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 29.741 1660135437500
+# HELP tibber_power_consumption_previous_hour Power consumption previous hour
+# TYPE tibber_power_consumption_previous_hour gauge
+tibber_power_consumption_previous_hour{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 1.82 1660135437500
 # HELP tibber_power_cost_day_total Total power cost since midnight
 # TYPE tibber_power_cost_day_total counter
 tibber_power_cost_day_total{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 10.981923 1660135437500
+# HELP tibber_power_cost_previous_day Power cost previous day
+# TYPE tibber_power_cost_previous_day gauge
+tibber_power_cost_previous_day{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 133.901981625 1660135437500
+# HELP tibber_power_cost_previous_hour Power cost previous hour
+# TYPE tibber_power_cost_previous_hour gauge
+tibber_power_cost_previous_hour{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 7.37839375 1660135437500
 # HELP tibber_power_price Power price
 # TYPE tibber_power_price gauge
 tibber_power_price{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",type="energy"} 2.5294
