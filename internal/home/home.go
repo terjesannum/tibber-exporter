@@ -55,13 +55,21 @@ func (h *Home) UpdatePrevious(ctx context.Context, client *graphql.Client, res t
 		log.Println(err)
 		return
 	}
+	values := &h.PreviousHour
+	if res == tibber.ResolutionDaily {
+		values = &h.PreviousDay
+	}
+	if len(prev.Viewer.Home.Consumption.Nodes) == 0 {
+		log.Printf("Got 0 consumption nodes for %v\n", h.Id)
+		values.Consumption = nil
+		values.Cost = nil
+		return
+	}
 	node := prev.Viewer.Home.Consumption.Nodes[0]
 	now := time.Now()
 	age := now.Sub(node.To).Hours()
-	values := &h.PreviousHour
 	if res == tibber.ResolutionDaily {
 		age = age / 24
-		values = &h.PreviousDay
 	}
 	values.Timestamp = now
 	if age < 1 {
