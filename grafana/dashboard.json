@@ -27,7 +27,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.0.5"
+      "version": "9.1.6"
     },
     {
       "type": "panel",
@@ -137,7 +137,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -208,7 +208,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -279,7 +279,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -350,7 +350,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -415,7 +415,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -468,7 +468,7 @@
             }
           },
           "mappings": [],
-          "min": 0,
+          "min": 1e-10,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -613,7 +613,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -644,6 +644,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "axisSoftMin": 0,
@@ -717,7 +719,8 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -787,7 +790,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -840,7 +843,7 @@
             }
           },
           "mappings": [],
-          "min": 0,
+          "min": 1e-10,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -939,7 +942,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -1004,7 +1007,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -1033,6 +1036,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "axisSoftMin": 0,
@@ -1136,7 +1141,8 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -1226,7 +1232,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -1280,6 +1286,7 @@
             }
           },
           "mappings": [],
+          "min": 1e-10,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1378,7 +1385,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -1399,7 +1406,7 @@
     }
   ],
   "refresh": "1m",
-  "schemaVersion": 36,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1450,6 +1457,6 @@
   "timezone": "",
   "title": "Tibber",
   "uid": "5rT8QDiVk",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
