@@ -11,7 +11,9 @@ This prometheus exporter will connect to the Tibber API, subscribe to updates fr
 See the provided [Grafana dashboard](grafana/dashboard.json) for examples on how they can be used.  
 Note that the consumption, cost and price heatmap panels requires the [Hourly heatmap plugin](https://grafana.com/grafana/plugins/marcusolsson-hourly-heatmap-panel/).
 
-If you don't have a device for live measurements, only the power price metrics will be available on that dashboard, but it should be possible to create a dashboard with historic consumption and cost using the `..._previous_day` and `..._previous_hour` metrics. The availability of those metrics may vary between grid companies.
+#### Don't have Tibber Pulse or Watty?
+
+If you don't have a device for live measurements, only the power price metrics will be available on that dashboard. It is possible to create a dashboard with historic consumption and cost using the `..._previous_day` and `..._previous_hour` metrics, but the availability of those metrics may vary between grid companies. See the [dashboard without pulse](grafana/dashboard-without-pulse.json) for an example using the previous day metrics.
 
 ## Running
 
@@ -28,7 +30,7 @@ cd docker-compose
 TIBBER_TOKEN=... docker compose up
 ```
 
-Then go to http://localhost:3000/ and find the dashboard in the General folder.
+Then go to http://localhost:3000/ and find the dashboards in the General folder.
 
 ### Kubernetes
 
