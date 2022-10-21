@@ -43,10 +43,11 @@ func main() {
 
 	for _, s := range homesQuery.Viewer.Homes {
 		log.Printf("Found home: %v - %v\n", s.Id, s.AppNickname)
-		if s.CurrentSubscription.PriceInfo.Current.Currency == "" {
+		if s.CurrentSubscription.Id == nil {
 			log.Printf("No subscription found for home %v\n", s.Id)
 		} else {
 			log.Printf("Starting monitoring of home: %v - %v\n", s.Id, s.AppNickname)
+			log.Printf("Subscription: %v\n", s.CurrentSubscription.Id)
 			h := home.New(s.Id)
 			metrics.HomeInfo.WithLabelValues(
 				s.Id.(string),

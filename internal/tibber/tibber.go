@@ -22,6 +22,7 @@ type HomesQuery struct {
 				Longitude  graphql.String
 			}
 			CurrentSubscription struct {
+				Id        graphql.ID
 				PriceInfo struct {
 					Current struct {
 						Currency graphql.String
