@@ -1,7 +1,7 @@
 apiVersion: v2
 name: tibber-exporter
-version: 1.3.1
-appVersion: 11
+version: 1.3.2
+appVersion: 12
 description: Helm chart for Tibber prometheus exporter
 type: application
 keywords:
@@ -17,7 +17,7 @@ maintainers:
 annotations:
   artifacthub.io/images: |
     - name: tibber-exporter
-      image: ghcr.io/terjesannum/tibber-exporter:11
+      image: ghcr.io/terjesannum/tibber-exporter:12
   artifacthub.io/screenshots: |
     - title: Grafana dashboard
       url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
