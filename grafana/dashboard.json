@@ -561,7 +561,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
@@ -1457,6 +1457,6 @@
   "timezone": "",
   "title": "Tibber",
   "uid": "5rT8QDiVk",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }

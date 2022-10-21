@@ -422,7 +422,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
@@ -1003,6 +1003,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
