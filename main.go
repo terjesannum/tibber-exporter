@@ -47,7 +47,7 @@ func main() {
 			log.Printf("No subscription found for home %v\n", s.Id)
 		} else {
 			log.Printf("Starting monitoring of home: %v - %v\n", s.Id, s.AppNickname)
-			log.Printf("Subscription: %v\n", s.CurrentSubscription.Id)
+			log.Printf("Current subscription: %v\n", *s.CurrentSubscription.Id)
 			h := home.New(s.Id)
 			metrics.HomeInfo.WithLabelValues(
 				s.Id.(string),

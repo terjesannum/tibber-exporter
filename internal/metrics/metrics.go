@@ -292,29 +292,37 @@ func (c *HomeCollector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (c *HomeCollector) Collect(ch chan<- prometheus.Metric) {
-	ch <- prometheus.MustNewConstMetric(
-		c.price,
-		prometheus.GaugeValue,
-		c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Total,
-		"total",
-	)
-	ch <- prometheus.MustNewConstMetric(
-		c.price,
-		prometheus.GaugeValue,
-		c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Energy,
-		"energy",
-	)
-	ch <- prometheus.MustNewConstMetric(
-		c.price,
-		prometheus.GaugeValue,
-		c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Tax,
-		"tax",
-	)
-	ch <- prometheus.MustNewConstMetric(
-		c.priceLevel,
-		prometheus.GaugeValue,
-		float64(tibber.PriceLevel[string(c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Level)]),
-	)
+	if c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Total != nil {
+		ch <- prometheus.MustNewConstMetric(
+			c.price,
+			prometheus.GaugeValue,
+			*c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Total,
+			"total",
+		)
+	}
+	if c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Energy != nil {
+		ch <- prometheus.MustNewConstMetric(
+			c.price,
+			prometheus.GaugeValue,
+			*c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Energy,
+			"energy",
+		)
+	}
+	if c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Tax != nil {
+		ch <- prometheus.MustNewConstMetric(
+			c.price,
+			prometheus.GaugeValue,
+			*c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Tax,
+			"tax",
+		)
+	}
+	if c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Level != nil {
+		ch <- prometheus.MustNewConstMetric(
+			c.priceLevel,
+			prometheus.GaugeValue,
+			float64(tibber.PriceLevel[string(*c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Level)]),
+		)
+	}
 	if c.home.PreviousHour.Consumption != nil {
 		ch <- prometheus.NewMetricWithTimestamp(
 			c.home.PreviousHour.Timestamp,
