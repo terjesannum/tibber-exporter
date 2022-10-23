@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"context"
 
@@ -16,12 +18,24 @@ import (
 	"github.com/terjesannum/tibber-exporter/internal/home"
 	"github.com/terjesannum/tibber-exporter/internal/metrics"
 	"github.com/terjesannum/tibber-exporter/internal/tibber"
+	"golang.org/x/exp/slices"
 	"golang.org/x/oauth2"
 )
 
 var (
-	homesQuery tibber.HomesQuery
+	homesQuery       tibber.HomesQuery
+	liveMeasurements []string
 )
+
+func init() {
+	var s string
+	// Initialize with homes having live measurements. The data received in features.realTimeConsumptionEnabled is not always correct
+	flag.StringVar(&s, "live", os.Getenv("TIBBER_LIVE_MEASUREMENTS"), "Comma separated list of homes with live measurements")
+	flag.Parse()
+	if s != "" {
+		liveMeasurements = strings.Split(s, ",")
+	}
+}
 
 func main() {
 	ctx := context.Background()
@@ -41,6 +55,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	var started []string
 	for _, s := range homesQuery.Viewer.Homes {
 		log.Printf("Found home: %v - %v\n", s.Id, s.AppNickname)
 		if s.CurrentSubscription.Id == nil {
@@ -63,10 +78,11 @@ func main() {
 				string(s.CurrentSubscription.PriceInfo.Current.Currency),
 			).Set(1)
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
-			if s.Features.RealTimeConsumptionEnabled {
+			if s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, s.Id.(string)) {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
 				go h.SubscribeMeasurements(ctx, token)
 				prometheus.MustRegister(metrics.NewMeasurementCollector(s.Id.(string), &h.Measurements.LiveMeasurement, &h.TimestampedValues))
+				started = append(started, s.Id.(string))
 			} else {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}
@@ -86,6 +102,17 @@ func main() {
 					}
 				}
 			}()
+		}
+	}
+
+	// Exit if live monitoring of configured home for some reason hasn't started
+	if len(liveMeasurements) > 0 {
+		for _, l := range liveMeasurements {
+			if !slices.Contains(started, l) {
+				log.Printf("Monitoring of home %s not started. Exiting...\n", l)
+				time.Sleep(10 * time.Second)
+				os.Exit(1)
+			}
 		}
 	}
 

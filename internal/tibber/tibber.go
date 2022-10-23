@@ -30,7 +30,7 @@ type HomesQuery struct {
 				}
 			}
 			Features struct {
-				RealTimeConsumptionEnabled graphql.Boolean
+				RealTimeConsumptionEnabled bool
 			}
 		}
 	}
