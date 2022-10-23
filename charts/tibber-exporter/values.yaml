@@ -1,5 +1,13 @@
 tibberToken: ""
 
+# liveMeasurements can be used to initialize the exporter with
+# a list of homes that has live measurements. Used to ensure
+# live measurements is started as # the Tibber API not always
+# report correct in features->realTimeConsumptionEnabled
+liveMeasurements: []
+# - "4cda7b18-0bdf-5669-65b4-e24253f8a6d7"
+# - "68e3a27e-8a79-42e2-8379-f5e1ab1189de"
+
 serviceMonitor:
   enabled: false
   labels: {}
@@ -8,7 +16,7 @@ serviceMonitor:
   
 image:
   repository: ghcr.io/terjesannum/tibber-exporter
-  tag: 13
+  tag: 14
   pullPolicy: IfNotPresent
 
 nameOverride: ""

@@ -32,6 +32,10 @@ spec:
           env:
             - name: TIBBER_TOKEN
               value: '{{ required "Tibber token is required" .Values.tibberToken }}'
+            {{- if .Values.liveMeasurements }}
+            - name: TIBBER_LIVE_MEASUREMENTS
+              value: "{{range $i, $v := .Values.liveMeasurements}}{{if $i}},{{end}}{{.}}{{end}}"
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
