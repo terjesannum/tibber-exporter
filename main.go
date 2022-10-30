@@ -65,24 +65,24 @@ func main() {
 			log.Printf("Current subscription: %v\n", *s.CurrentSubscription.Id)
 			h := home.New(s.Id)
 			metrics.HomeInfo.WithLabelValues(
-				s.Id.(string),
-				string(s.AppNickname),
-				string(s.Address.Address1),
-				string(s.Address.Address2),
-				string(s.Address.Address3),
-				string(s.Address.PostalCode),
-				string(s.Address.City),
-				string(s.Address.Country),
-				string(s.Address.Latitude),
-				string(s.Address.Longitude),
-				string(s.CurrentSubscription.PriceInfo.Current.Currency),
+				string(s.Id),
+				s.AppNickname,
+				s.Address.Address1,
+				s.Address.Address2,
+				s.Address.Address3,
+				s.Address.PostalCode,
+				s.Address.City,
+				s.Address.Country,
+				s.Address.Latitude,
+				s.Address.Longitude,
+				s.CurrentSubscription.PriceInfo.Current.Currency,
 			).Set(1)
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
-			if s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, s.Id.(string)) {
+			if s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id)) {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
 				go h.SubscribeMeasurements(ctx, token)
-				prometheus.MustRegister(metrics.NewMeasurementCollector(s.Id.(string), &h.Measurements.LiveMeasurement, &h.TimestampedValues))
-				started = append(started, s.Id.(string))
+				prometheus.MustRegister(metrics.NewMeasurementCollector(string(s.Id), &h.Measurements.LiveMeasurement, &h.TimestampedValues))
+				started = append(started, string(s.Id))
 			} else {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}

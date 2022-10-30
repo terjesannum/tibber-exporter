@@ -273,12 +273,12 @@ func NewHomeCollector(home *home.Home) *HomeCollector {
 	log.Printf("Creating home collector for home %s\n", home.Id)
 	return &HomeCollector{
 		home:                    home,
-		price:                   prometheus.NewDesc("tibber_power_price", "Power price", []string{"type"}, prometheus.Labels{"home_id": home.Id.(string)}),
-		priceLevel:              prometheus.NewDesc("tibber_power_price_level", "Power price level", nil, prometheus.Labels{"home_id": home.Id.(string)}),
-		previousHourConsumption: prometheus.NewDesc("tibber_power_consumption_previous_hour", "Power consumption previous hour", nil, prometheus.Labels{"home_id": home.Id.(string)}),
-		previousHourCost:        prometheus.NewDesc("tibber_power_cost_previous_hour", "Power cost previous hour", nil, prometheus.Labels{"home_id": home.Id.(string)}),
-		previousDayConsumption:  prometheus.NewDesc("tibber_power_consumption_previous_day", "Power consumption previous day", nil, prometheus.Labels{"home_id": home.Id.(string)}),
-		previousDayCost:         prometheus.NewDesc("tibber_power_cost_previous_day", "Power cost previous day", nil, prometheus.Labels{"home_id": home.Id.(string)}),
+		price:                   prometheus.NewDesc("tibber_power_price", "Power price", []string{"type"}, prometheus.Labels{"home_id": string(home.Id)}),
+		priceLevel:              prometheus.NewDesc("tibber_power_price_level", "Power price level", nil, prometheus.Labels{"home_id": string(home.Id)}),
+		previousHourConsumption: prometheus.NewDesc("tibber_power_consumption_previous_hour", "Power consumption previous hour", nil, prometheus.Labels{"home_id": string(home.Id)}),
+		previousHourCost:        prometheus.NewDesc("tibber_power_cost_previous_hour", "Power cost previous hour", nil, prometheus.Labels{"home_id": string(home.Id)}),
+		previousDayConsumption:  prometheus.NewDesc("tibber_power_consumption_previous_day", "Power consumption previous day", nil, prometheus.Labels{"home_id": string(home.Id)}),
+		previousDayCost:         prometheus.NewDesc("tibber_power_cost_previous_day", "Power cost previous day", nil, prometheus.Labels{"home_id": string(home.Id)}),
 	}
 }
 

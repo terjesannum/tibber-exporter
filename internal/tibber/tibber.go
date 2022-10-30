@@ -10,22 +10,22 @@ type HomesQuery struct {
 	Viewer struct {
 		Homes []struct {
 			Id          graphql.ID
-			AppNickname graphql.String
+			AppNickname string
 			Address     struct {
-				Address1   graphql.String
-				Address2   graphql.String
-				Address3   graphql.String
-				City       graphql.String
-				PostalCode graphql.String
-				Country    graphql.String
-				Latitude   graphql.String
-				Longitude  graphql.String
+				Address1   string
+				Address2   string
+				Address3   string
+				City       string
+				PostalCode string
+				Country    string
+				Latitude   string
+				Longitude  string
 			}
 			CurrentSubscription struct {
 				Id        *graphql.ID
 				PriceInfo struct {
 					Current struct {
-						Currency graphql.String
+						Currency string
 					}
 				}
 			}
@@ -45,7 +45,7 @@ type Prices struct {
 						Total  *float64
 						Energy *float64
 						Tax    *float64
-						Level  *graphql.String
+						Level  *string
 					}
 				}
 			}
