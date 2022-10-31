@@ -21,7 +21,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.1.6"
+      "version": "9.2.2"
     },
     {
       "type": "panel",
@@ -276,7 +276,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.2",
       "targets": [
         {
           "datasource": {
@@ -474,7 +474,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.2",
       "targets": [
         {
           "datasource": {
@@ -547,7 +547,6 @@
         "y": 7
       },
       "id": 21,
-      "interval": "1d",
       "options": {
         "barRadius": 0,
         "barWidth": 0.8,
@@ -575,8 +574,8 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(tibber_power_consumption_previous_day{home_id=\"$home\"} offset -2d) * 1000",
-          "interval": "",
+          "expr": "quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -2d) * 1000",
+          "interval": "1d",
           "legendFormat": "Power consumption",
           "range": true,
           "refId": "A"
@@ -633,7 +632,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.2",
       "targets": [
         {
           "datasource": {
@@ -696,13 +695,13 @@
       },
       "id": 26,
       "options": {
-        "from": "0",
+        "from": "1",
         "legendGradientQuality": "high",
         "showCellBorder": false,
         "showLegend": true,
         "showTooltip": true,
         "showValueIndicator": false,
-        "to": "1"
+        "to": "2"
       },
       "targets": [
         {
@@ -711,7 +710,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(tibber_power_consumption_previous_day{home_id=\"$home\"} offset -2d) * 1000",
+          "expr": "quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -2d) * 1000",
           "interval": "1d",
           "legendFormat": "Power consumption",
           "range": true,
@@ -775,7 +774,6 @@
         "y": 14
       },
       "id": 23,
-      "interval": "1d",
       "options": {
         "barRadius": 0,
         "barWidth": 0.8,
@@ -803,8 +801,8 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(tibber_power_cost_previous_day{home_id=\"$home\"} offset -2d)",
-          "interval": "",
+          "expr": "quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -2d)",
+          "interval": "1d",
           "legendFormat": "Power cost",
           "range": true,
           "refId": "A"
@@ -861,7 +859,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.2",
       "targets": [
         {
           "datasource": {
@@ -924,13 +922,13 @@
       },
       "id": 27,
       "options": {
-        "from": "0",
+        "from": "1",
         "legendGradientQuality": "high",
         "showCellBorder": false,
         "showLegend": true,
         "showTooltip": true,
         "showValueIndicator": false,
-        "to": "1"
+        "to": "2"
       },
       "targets": [
         {
@@ -939,7 +937,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(tibber_power_cost_previous_day{home_id=\"$home\"} offset -2d)",
+          "expr": "quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -2d)",
           "interval": "1d",
           "legendFormat": "Power consumption",
           "range": true,
@@ -1003,6 +1001,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
