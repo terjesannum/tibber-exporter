@@ -538,7 +538,20 @@
           },
           "unit": "watth"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:DD/MM"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -765,7 +778,20 @@
           },
           "unit": "kr"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:DD/MM"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -1001,6 +1027,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }
