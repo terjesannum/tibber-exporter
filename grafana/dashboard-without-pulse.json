@@ -574,7 +574,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -2d) * 1000",
+          "expr": "avg(quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -2d)) * 1000",
           "interval": "1d",
           "legendFormat": "Power consumption",
           "range": true,
@@ -710,7 +710,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -2d) * 1000",
+          "expr": "avg(quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -2d)) * 1000",
           "interval": "1d",
           "legendFormat": "Power consumption",
           "range": true,
@@ -801,7 +801,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -2d)",
+          "expr": "avg(quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -2d))",
           "interval": "1d",
           "legendFormat": "Power cost",
           "range": true,
@@ -937,7 +937,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -2d)",
+          "expr": "avg(quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -2d))",
           "interval": "1d",
           "legendFormat": "Power consumption",
           "range": true,
@@ -1001,6 +1001,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
