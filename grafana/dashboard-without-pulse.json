@@ -25,6 +25,12 @@
     },
     {
       "type": "panel",
+      "id": "heatmap",
+      "name": "Heatmap",
+      "version": ""
+    },
+    {
+      "type": "panel",
       "id": "marcusolsson-hourly-heatmap-panel",
       "name": "Hourly heatmap",
       "version": "2.0.1"
@@ -670,33 +676,16 @@
       },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "custom": {
-            "calculation": "mean",
-            "colorPalette": "interpolateYlOrRd",
-            "colorSpace": "rgb",
-            "groupBy": 60,
-            "invertPalette": false,
-            "nullValueColor": "rgb(155, 155, 155)"
-          },
-          "mappings": [],
-          "min": 1e-10,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "watth"
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
         },
         "overrides": []
       },
@@ -706,16 +695,45 @@
         "x": 17,
         "y": 7
       },
-      "id": 26,
+      "id": 29,
       "options": {
-        "from": "1",
-        "legendGradientQuality": "high",
-        "showCellBorder": false,
-        "showLegend": true,
-        "showTooltip": true,
-        "showValueIndicator": false,
-        "to": "2"
+        "calculate": false,
+        "cellGap": 0,
+        "cellValues": {
+          "unit": "watth"
+        },
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "min": 0,
+          "mode": "scheme",
+          "reverse": true,
+          "scale": "exponential",
+          "scheme": "YlOrRd",
+          "steps": 128
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "show": true,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "hidden",
+          "reverse": false
+        }
       },
+      "pluginVersion": "9.2.2",
       "targets": [
         {
           "datasource": {
@@ -723,16 +741,15 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -2d)) * 1000",
+          "expr": "avg(quantile_over_time(0.9,tibber_power_consumption_previous_day{home_id=\"$home\"}[1d] offset -1d)) * 1000",
           "interval": "1d",
-          "legendFormat": "Power consumption",
+          "legendFormat": "Consumption",
           "range": true,
           "refId": "A"
         }
       ],
       "title": "Consumption",
-      "transformations": [],
-      "type": "marcusolsson-hourly-heatmap-panel"
+      "type": "heatmap"
     },
     {
       "datasource": {
@@ -910,33 +927,16 @@
       },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "custom": {
-            "calculation": "mean",
-            "colorPalette": "interpolateYlOrRd",
-            "colorSpace": "rgb",
-            "groupBy": 60,
-            "invertPalette": false,
-            "nullValueColor": "rgb(155, 155, 155)"
-          },
-          "mappings": [],
-          "min": 1e-10,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "kr"
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
         },
         "overrides": []
       },
@@ -946,16 +946,45 @@
         "x": 17,
         "y": 14
       },
-      "id": 27,
+      "id": 30,
       "options": {
-        "from": "1",
-        "legendGradientQuality": "high",
-        "showCellBorder": false,
-        "showLegend": true,
-        "showTooltip": true,
-        "showValueIndicator": false,
-        "to": "2"
+        "calculate": false,
+        "cellGap": 0,
+        "cellValues": {
+          "unit": "kr"
+        },
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "min": 0,
+          "mode": "scheme",
+          "reverse": true,
+          "scale": "exponential",
+          "scheme": "YlOrRd",
+          "steps": 128
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "show": true,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "hidden",
+          "reverse": false
+        }
       },
+      "pluginVersion": "9.2.2",
       "targets": [
         {
           "datasource": {
@@ -963,16 +992,15 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "avg(quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -2d))",
+          "expr": "avg(quantile_over_time(0.9,tibber_power_cost_previous_day{home_id=\"$home\"}[1d] offset -1d))",
           "interval": "1d",
-          "legendFormat": "Power consumption",
+          "legendFormat": "Consumption",
           "range": true,
           "refId": "A"
         }
       ],
       "title": "Cost",
-      "transformations": [],
-      "type": "marcusolsson-hourly-heatmap-panel"
+      "type": "heatmap"
     }
   ],
   "refresh": "1m",
@@ -1027,6 +1055,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
