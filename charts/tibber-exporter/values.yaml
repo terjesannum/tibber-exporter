@@ -16,7 +16,7 @@ serviceMonitor:
   
 image:
   repository: ghcr.io/terjesannum/tibber-exporter
-  tag: 16
+  tag: 17
   pullPolicy: IfNotPresent
 
 nameOverride: ""
