@@ -4,8 +4,8 @@ go 1.19
 
 require (
 	github.com/hasura/go-graphql-client v0.8.1
-	github.com/prometheus/client_golang v1.13.0
-	golang.org/x/exp v0.0.0-20221028150844-83b7d23a625f
+	github.com/prometheus/client_golang v1.13.1
+	golang.org/x/exp v0.0.0-20221031165847-c99f073a8326
 	golang.org/x/oauth2 v0.1.0
 )
 
