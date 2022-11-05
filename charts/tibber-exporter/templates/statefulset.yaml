@@ -33,7 +33,7 @@ spec:
             - name: TIBBER_TOKEN
               value: '{{ required "Tibber token is required" .Values.tibberToken }}'
           args:
-            {{- range $i, $v := .Values.liveMeasurements}}
+            {{- range .Values.liveMeasurements}}
             - --live
             - "{{ . }}"
             {{- end }}
