@@ -4,6 +4,33 @@ entries:
   - annotations:
       artifacthub.io/images: |
         - name: tibber-exporter
+          image: ghcr.io/terjesannum/tibber-exporter:16
+      artifacthub.io/screenshots: |
+        - title: Grafana dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
+    apiVersion: v2
+    appVersion: "16"
+    created: "2022-11-05T10:03:16.230280534Z"
+    description: Helm chart for Tibber prometheus exporter
+    digest: 82772918d10cbd3358b294e88c2a931a3231be5bf1eff59bbdecf85f3aed4717
+    home: https://github.com/terjesannum/tibber-exporter
+    keywords:
+    - tibber
+    - prometheus
+    - grafana
+    - monitoring
+    maintainers:
+    - email: terje@offpiste.org
+      name: Terje Sannum
+      url: https://github.com/terjesannum
+    name: tibber-exporter
+    type: application
+    urls:
+    - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.4.2/tibber-exporter-1.4.2.tgz
+    version: 1.4.2
+  - annotations:
+      artifacthub.io/images: |
+        - name: tibber-exporter
           image: ghcr.io/terjesannum/tibber-exporter:15
       artifacthub.io/screenshots: |
         - title: Grafana dashboard
@@ -272,4 +299,4 @@ entries:
     urls:
     - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.0.0/tibber-exporter-1.0.0.tgz
     version: 1.0.0
-generated: "2022-10-30T13:28:52.952812456Z"
+generated: "2022-11-05T10:03:16.230342537Z"
