@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"context"
 
@@ -24,17 +23,26 @@ import (
 
 var (
 	homesQuery       tibber.HomesQuery
-	liveMeasurements []string
+	liveMeasurements stringArgs
 )
 
+type (
+	stringArgs []string
+)
+
+func (sa *stringArgs) String() string {
+	return fmt.Sprintln(*sa)
+}
+
+func (sa *stringArgs) Set(s string) error {
+	*sa = append(*sa, s)
+	return nil
+}
+
 func init() {
-	var s string
 	// Initialize with homes having live measurements. The data received in features.realTimeConsumptionEnabled is not always correct
-	flag.StringVar(&s, "live", os.Getenv("TIBBER_LIVE_MEASUREMENTS"), "Comma separated list of homes with live measurements")
+	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements (optional)")
 	flag.Parse()
-	if s != "" {
-		liveMeasurements = strings.Split(s, ",")
-	}
 }
 
 func exit(msg string) {
