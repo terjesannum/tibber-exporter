@@ -37,6 +37,12 @@ func init() {
 	}
 }
 
+func exit(msg string) {
+	log.Println(msg)
+	time.Sleep(10 * time.Second)
+	os.Exit(1)
+}
+
 func main() {
 	ctx := context.Background()
 
@@ -49,10 +55,7 @@ func main() {
 
 	err := client.Query(ctx, &homesQuery, nil)
 	if err != nil {
-		log.Printf("Error getting homes: %v", err)
-		log.Println("Exiting...")
-		time.Sleep(10 * time.Second)
-		os.Exit(1)
+		exit(fmt.Sprintf("Error getting homes: %v. Exiting...", err))
 	}
 
 	var started []string
@@ -109,9 +112,7 @@ func main() {
 	if len(liveMeasurements) > 0 {
 		for _, l := range liveMeasurements {
 			if !slices.Contains(started, l) {
-				log.Printf("Monitoring of home %s not started. Exiting...\n", l)
-				time.Sleep(10 * time.Second)
-				os.Exit(1)
+				exit(fmt.Sprintf("Monitoring of home %s not started. Exiting...\n", l))
 			}
 		}
 	}
@@ -122,6 +123,5 @@ func main() {
 	})
 	http.Handle("/metrics", promhttp.Handler())
 	err = http.ListenAndServe(":8080", nil)
-	log.Printf("Error: %v", err)
-	time.Sleep(10 * time.Second)
+	exit(fmt.Sprintf("Error: %v", err))
 }
