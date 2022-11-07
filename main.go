@@ -22,8 +22,9 @@ import (
 )
 
 var (
-	homesQuery       tibber.HomesQuery
-	liveMeasurements stringArgs
+	homesQuery              tibber.HomesQuery
+	liveMeasurements        stringArgs
+	disableLiveMeasurements stringArgs
 )
 
 type (
@@ -42,6 +43,7 @@ func (sa *stringArgs) Set(s string) error {
 func init() {
 	// Initialize with homes having live measurements. The data received in features.realTimeConsumptionEnabled is not always correct
 	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements (optional)")
+	flag.Var(&disableLiveMeasurements, "disable-live", "Id of home to disable live measurements (optional)")
 	flag.Parse()
 }
 
@@ -89,7 +91,7 @@ func main() {
 				s.CurrentSubscription.PriceInfo.Current.Currency,
 			).Set(1)
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
-			if s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id)) {
+			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
 				go h.SubscribeMeasurements(ctx, token)
 				prometheus.MustRegister(metrics.NewMeasurementCollector(string(s.Id), &h.Measurements.LiveMeasurement, &h.TimestampedValues))
