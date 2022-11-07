@@ -8,7 +8,8 @@ import (
 
 type HomesQuery struct {
 	Viewer struct {
-		Homes []struct {
+		WebsocketSubscriptionUrl string
+		Homes                    []struct {
 			Id          graphql.ID
 			AppNickname string
 			Address     struct {

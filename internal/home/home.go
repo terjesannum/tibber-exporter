@@ -81,9 +81,9 @@ func (h *Home) UpdatePrevious(ctx context.Context, client *graphql.Client, res t
 	}
 }
 
-func (h *Home) SubscribeMeasurements(ctx context.Context, token string) {
+func (h *Home) SubscribeMeasurements(ctx context.Context, wsUrl string, token string) {
 	log.Printf("Creating measurements subscription for home %v\n", h.Id)
-	subscriber := graphql.NewSubscriptionClient("wss://api.tibber.com/v1-beta/gql/subscriptions").WithConnectionParams(map[string]interface{}{
+	subscriber := graphql.NewSubscriptionClient(wsUrl).WithConnectionParams(map[string]interface{}{
 		"token": token,
 	}).WithLog(log.Println)
 	subscriber.OnConnected(func() {

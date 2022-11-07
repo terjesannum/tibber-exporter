@@ -23,6 +23,7 @@ import (
 
 var (
 	homesQuery              tibber.HomesQuery
+	liveUrl                 string
 	liveMeasurements        stringArgs
 	disableLiveMeasurements stringArgs
 )
@@ -41,9 +42,9 @@ func (sa *stringArgs) Set(s string) error {
 }
 
 func init() {
-	// Initialize with homes having live measurements. The data received in features.realTimeConsumptionEnabled is not always correct
-	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements (optional)")
-	flag.Var(&disableLiveMeasurements, "disable-live", "Id of home to disable live measurements (optional)")
+	flag.StringVar(&liveUrl, "live-url", "wss://api.tibber.com/v1-beta/gql/subscriptions", "Websocket url for live measurements")
+	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements")
+	flag.Var(&disableLiveMeasurements, "disable-live", "Id of home to disable live measurements")
 	flag.Parse()
 }
 
@@ -67,7 +68,12 @@ func main() {
 	if err != nil {
 		exit(fmt.Sprintf("Error getting homes: %v. Exiting...", err))
 	}
-
+	wsUrl := homesQuery.Viewer.WebsocketSubscriptionUrl
+	log.Printf("Websocket url: %s\n", wsUrl)
+	if liveUrl != "" && liveUrl != wsUrl {
+		log.Printf("Overiding websocket url with: %s\n", liveUrl)
+		wsUrl = liveUrl
+	}
 	var started []string
 	for _, s := range homesQuery.Viewer.Homes {
 		log.Printf("Found home: %v - %v\n", s.Id, s.AppNickname)
@@ -93,7 +99,7 @@ func main() {
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
-				go h.SubscribeMeasurements(ctx, token)
+				go h.SubscribeMeasurements(ctx, wsUrl, token)
 				prometheus.MustRegister(metrics.NewMeasurementCollector(string(s.Id), &h.Measurements.LiveMeasurement, &h.TimestampedValues))
 				started = append(started, string(s.Id))
 			} else {
