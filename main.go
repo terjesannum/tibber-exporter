@@ -42,7 +42,7 @@ func (sa *stringArgs) Set(s string) error {
 }
 
 func init() {
-	flag.StringVar(&liveUrl, "live-url", "wss://api.tibber.com/v1-beta/gql/subscriptions", "Websocket url for live measurements")
+	flag.StringVar(&liveUrl, "live-url", "", "Websocket url for live measurements")
 	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements")
 	flag.Var(&disableLiveMeasurements, "disable-live", "Id of home to disable live measurements")
 	flag.Parse()
