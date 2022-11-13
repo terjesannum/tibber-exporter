@@ -8,7 +8,7 @@ COPY . /workspace
 
 RUN CGO_ENABLED=0 go build -a -o tibber-exporter .
 
-FROM alpine:3.16.2
+FROM alpine:3.16.3
 
 LABEL org.opencontainers.image.title="tibber-exporter" \
       org.opencontainers.image.description="Prometheus exporter for Tibber power usage and costs" \
