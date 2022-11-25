@@ -26,6 +26,7 @@ var (
 	liveUrl                 string
 	liveMeasurements        stringArgs
 	disableLiveMeasurements stringArgs
+	listenAddress string
 )
 
 type (
@@ -45,6 +46,7 @@ func init() {
 	flag.StringVar(&liveUrl, "live-url", "", "Websocket url for live measurements")
 	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements")
 	flag.Var(&disableLiveMeasurements, "disable-live", "Id of home to disable live measurements")
+	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests (defaults to :8080)")
 	flag.Parse()
 }
 
@@ -138,6 +140,6 @@ func main() {
 		fmt.Fprintln(w, "Tibber prometheus exporter")
 	})
 	http.Handle("/metrics", promhttp.Handler())
-	err = http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(listenAddress, nil)
 	exit(fmt.Sprintf("Error: %v", err))
 }
