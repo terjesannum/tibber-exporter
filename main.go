@@ -26,7 +26,7 @@ var (
 	liveUrl                 string
 	liveMeasurements        stringArgs
 	disableLiveMeasurements stringArgs
-	listenAddress string
+	listenAddress           string
 )
 
 type (
