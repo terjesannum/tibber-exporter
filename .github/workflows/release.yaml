@@ -33,4 +33,4 @@ jobs:
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/tibber-exporter:${{ steps.get_version.outputs.version }},ghcr.io/${{ github.repository_owner }}/tibber-exporter:latest
         build-args: |
-          UA="tibber-exporter/${{ steps.get_version.outputs.version }} (${{ github.server_url}}/${{ github.repository }})"
+          UA=tibber-exporter/${{ steps.get_version.outputs.version }} (${{ github.server_url}}/${{ github.repository }})
