@@ -6,7 +6,6 @@ require (
 	github.com/hasura/go-graphql-client v0.8.1
 	github.com/prometheus/client_golang v1.14.0
 	golang.org/x/exp v0.0.0-20221111204811-129d8d6c17ab
-	golang.org/x/oauth2 v0.2.0
 )
 
 require (
@@ -19,9 +18,7 @@ require (
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
-	golang.org/x/net v0.2.0 // indirect
 	golang.org/x/sys v0.2.0 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
 )

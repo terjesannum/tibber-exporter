@@ -3,6 +3,7 @@ package home
 import (
 	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -81,11 +82,13 @@ func (h *Home) UpdatePrevious(ctx context.Context, client *graphql.Client, res t
 	}
 }
 
-func (h *Home) SubscribeMeasurements(ctx context.Context, wsUrl string, token string) {
+func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl string, token string) {
 	log.Printf("Creating measurements subscription for home %v\n", h.Id)
-	subscriber := graphql.NewSubscriptionClient(wsUrl).WithConnectionParams(map[string]interface{}{
-		"token": token,
-	}).WithLog(log.Println)
+	subscriber := graphql.NewSubscriptionClient(wsUrl)
+	subscriber.WithConnectionParams(map[string]interface{}{"token": token})
+	subscriber.WithLog(log.Println)
+	subscriber.WithRetryTimeout(time.Second * 5)
+	subscriber.WithWebSocketOptions(graphql.WebsocketOptions{HTTPClient: hc})
 	subscriber.OnConnected(func() {
 		log.Printf("Measurements subscription for home %v connected\n", h.Id)
 	})

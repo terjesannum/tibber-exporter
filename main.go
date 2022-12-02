@@ -1,14 +1,12 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-
-	"context"
-
 	"time"
 
 	"github.com/hasura/go-graphql-client"
@@ -18,19 +16,24 @@ import (
 	"github.com/terjesannum/tibber-exporter/internal/metrics"
 	"github.com/terjesannum/tibber-exporter/internal/tibber"
 	"golang.org/x/exp/slices"
-	"golang.org/x/oauth2"
 )
 
 var (
+	token                   string
 	homesQuery              tibber.HomesQuery
 	liveUrl                 string
 	liveMeasurements        stringArgs
 	disableLiveMeasurements stringArgs
 	listenAddress           string
+	userAgent               string
 )
 
 type (
 	stringArgs []string
+	transport  struct {
+		Token     string
+		UserAgent string
+	}
 )
 
 func (sa *stringArgs) String() string {
@@ -43,11 +46,15 @@ func (sa *stringArgs) Set(s string) error {
 }
 
 func init() {
+	flag.StringVar(&token, "token", os.Getenv("TIBBER_TOKEN"), "Tibber API token")
 	flag.StringVar(&liveUrl, "live-url", "", "Websocket url for live measurements")
 	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements")
 	flag.Var(&disableLiveMeasurements, "disable-live", "Id of home to disable live measurements")
 	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests (defaults to :8080)")
 	flag.Parse()
+	if userAgent == "" {
+		userAgent = "tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
+	}
 }
 
 func exit(msg string) {
@@ -56,15 +63,16 @@ func exit(msg string) {
 	os.Exit(1)
 }
 
+func (t *transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", t.Token))
+	req.Header.Set("User-Agent", t.UserAgent)
+	return http.DefaultTransport.RoundTrip(req)
+}
+
 func main() {
 	ctx := context.Background()
-
-	token := os.Getenv("TIBBER_TOKEN")
-	oauth := oauth2.NewClient(ctx, oauth2.StaticTokenSource(&oauth2.Token{
-		AccessToken: token,
-		TokenType:   "Bearer",
-	}))
-	client := graphql.NewClient("https://api.tibber.com/v1-beta/gql", oauth)
+	hc := &http.Client{Transport: &transport{Token: token, UserAgent: userAgent}}
+	client := graphql.NewClient("https://api.tibber.com/v1-beta/gql", hc)
 
 	err := client.Query(ctx, &homesQuery, nil)
 	if err != nil {
@@ -101,7 +109,7 @@ func main() {
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
-				go h.SubscribeMeasurements(ctx, wsUrl, token)
+				go h.SubscribeMeasurements(ctx, hc, wsUrl, token)
 				prometheus.MustRegister(metrics.NewMeasurementCollector(string(s.Id), &h.Measurements.LiveMeasurement, &h.TimestampedValues))
 				started = append(started, string(s.Id))
 			} else {
