@@ -70,6 +70,7 @@ func (t *transport) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 func main() {
+	log.Printf("Starting %s\n", userAgent)
 	ctx := context.Background()
 	hc := &http.Client{Transport: &transport{Token: token, UserAgent: userAgent}}
 	client := graphql.NewClient("https://api.tibber.com/v1-beta/gql", hc)
