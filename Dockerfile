@@ -1,12 +1,14 @@
 FROM golang:1.19.3-alpine3.16 as builder
 
+ARG UA="tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
+
 WORKDIR /workspace
 COPY go.* ./
 RUN go mod download
 
 COPY . /workspace
 
-RUN CGO_ENABLED=0 go build -a -o tibber-exporter .
+RUN CGO_ENABLED=0 go build -a -o tibber-exporter -ldflags "-X 'main.userAgent=$UA'" .
 
 FROM alpine:3.16.3
 
