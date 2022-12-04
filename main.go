@@ -126,6 +126,12 @@ func main() {
 						h.UpdatePrices(ctx, client)
 						h.UpdatePrevious(ctx, client, tibber.ResolutionHourly)
 						h.UpdatePrevious(ctx, client, tibber.ResolutionDaily)
+						if slices.Contains(started, string(h.Id)) {
+							timeDiff := time.Now().Sub(h.Measurements.LiveMeasurement.Timestamp)
+							if timeDiff.Minutes() > 1 {
+								exit(fmt.Sprintf("No measurements received for home %s since %s. Exiting...\n", h.Id, h.Measurements.LiveMeasurement.Timestamp))
+							}
+						}
 					case <-quit:
 						ticker.Stop()
 						return
