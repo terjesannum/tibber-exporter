@@ -21,6 +21,8 @@ Docker image is available on [ghcr.io](https://github.com/terjesannum/tibber-exp
 
 A `TIBBER_TOKEN` is required to use the Tibber API, go to [developer.tibber.com](https://developer.tibber.com/) to find yours.
 
+Regardless of how you run this program, it is important to run it with an automatic restart mechanism. If the live feed from Tibber for some reason is interrupted or not available, the program will take a short pause and exit. The pause is to avoid a restart loop and trigger rate limiting in the Tibber API, and just exiting and restarting is better than trying to handle every possible error situation.
+
 ### Docker compose
 
 If you don't already run Grafana and Prometheus, you can try a complete setup with `docker compose`.
@@ -53,7 +55,7 @@ This with install the exporter with the `prometheus.io/scrape` annotation set to
 helm install tibber-exporter tibber-exporter/tibber-exporter --set tibberToken=... --set serviceMonitor.enabled=true
 ```
 
-### Standalone
+### Docker container
 
 ```sh
 docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:latest
