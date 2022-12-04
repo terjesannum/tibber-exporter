@@ -21,7 +21,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.2.2"
+      "version": "9.2.3"
     },
     {
       "type": "panel",
@@ -282,7 +282,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "9.2.3",
       "targets": [
         {
           "datasource": {
@@ -480,7 +480,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "9.2.3",
       "targets": [
         {
           "datasource": {
@@ -651,7 +651,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "9.2.3",
       "targets": [
         {
           "datasource": {
@@ -660,7 +660,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(tibber_power_consumption_previous_day{home_id=\"$home\"})",
+          "expr": "avg(tibber_power_consumption_previous_day{home_id=\"$home\"}) * 1000",
           "instant": true,
           "range": false,
           "refId": "A"
@@ -733,7 +733,7 @@
           "reverse": false
         }
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "9.2.3",
       "targets": [
         {
           "datasource": {
@@ -902,7 +902,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "9.2.3",
       "targets": [
         {
           "datasource": {
@@ -984,7 +984,7 @@
           "reverse": false
         }
       },
-      "pluginVersion": "9.2.2",
+      "pluginVersion": "9.2.3",
       "targets": [
         {
           "datasource": {
@@ -1055,6 +1055,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 6,
+  "version": 7,
   "weekStart": ""
 }
