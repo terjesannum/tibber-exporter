@@ -556,6 +556,21 @@
                 "value": "time:DD/MM"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Power consumption"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -807,6 +822,21 @@
                 "value": "time:DD/MM"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Power cost"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1055,6 +1085,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 7,
+  "version": 8,
   "weekStart": ""
 }
