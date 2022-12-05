@@ -13,7 +13,10 @@ Note that the consumption, cost and price heatmap panels requires the [Hourly he
 
 #### Don't have Tibber Pulse or Watty?
 
-If you don't have a device for live measurements, only the power price metrics will be available on that dashboard. It is possible to create a dashboard with historic consumption and cost using the `..._previous_day` and `..._previous_hour` metrics, but the availability of those metrics may vary between grid companies. See the [dashboard without pulse](grafana/dashboard-without-pulse.json) for an example using the previous day metrics.
+If you don't have a device for live measurements, only the power price metrics will be available on that dashboard. It is possible to create a dashboard with historic consumption and cost using the `..._previous_day` and `..._previous_hour` metrics, but the availability of those metrics may vary between grid companies. See the [dashboard without pulse](grafana/dashboard-without-pulse.json) for an example using the previous day metrics:
+
+![Grafana dashboard without pulse](grafana/dashboard-without-pulse.png)
+
 
 ## Running
 
