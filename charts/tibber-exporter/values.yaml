@@ -16,7 +16,8 @@ serviceMonitor:
   
 image:
   repository: ghcr.io/terjesannum/tibber-exporter
-  tag: 23
+  # Overrides the image tag whose default is the chart appVersion
+  tag: ""
   pullPolicy: IfNotPresent
 
 nameOverride: ""
