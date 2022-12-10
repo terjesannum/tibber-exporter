@@ -1,6 +1,10 @@
-FROM golang:1.19.3-alpine3.16 as builder
+FROM golang:1.19.4-alpine3.17 as builder
 
 ARG UA="tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
+
+RUN apk --update add ca-certificates
+RUN echo 'tibber:*:65532:' > /tmp/group && \
+    echo 'tibber:*:65532:65532:tibber:/:/tibber-exporter' > /tmp/passwd
 
 WORKDIR /workspace
 COPY go.* ./
@@ -10,7 +14,7 @@ COPY . /workspace
 
 RUN CGO_ENABLED=0 go build -a -o tibber-exporter -ldflags "-X 'main.userAgent=$UA'" .
 
-FROM alpine:3.16.3
+FROM scratch
 
 LABEL org.opencontainers.image.title="tibber-exporter" \
       org.opencontainers.image.description="Prometheus exporter for Tibber power usage and costs" \
@@ -19,8 +23,12 @@ LABEL org.opencontainers.image.title="tibber-exporter" \
       org.opencontainers.image.source="https://github.com/terjesannum/tibber-exporter"
 
 WORKDIR /
+EXPOSE 8080
 
+COPY --from=builder /tmp/passwd /tmp/group /etc/
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /workspace/tibber-exporter .
+
 USER 65532:65532
 
 ENTRYPOINT ["/tibber-exporter"]
