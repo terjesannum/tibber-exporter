@@ -9,6 +9,7 @@ on:
 
 jobs:
   release-docker:
+    name: Release docker
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
