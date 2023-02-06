@@ -1,12 +1,14 @@
-name: Build and publish docker image
+name: Release
 
 on:
   push:
-    tags:
-      - '[0-9]+'
+    branches:
+      - master
+    paths:
+      - charts/**
 
 jobs:
-  release:
+  release-docker:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -21,16 +23,75 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Get docker image version
+    - name: Get release version
       id: get_version
-      run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      run: "sed -n 's/^version: /version=/p' charts/tibber-exporter/Chart.yaml >> $GITHUB_OUTPUT"
     - name: Build and push
       id: docker_build
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       with:
         context: .
         platforms: linux/amd64,linux/arm64,linux/arm/v7
+        provenance: false
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/tibber-exporter:${{ steps.get_version.outputs.version }},ghcr.io/${{ github.repository_owner }}/tibber-exporter:latest
         build-args: |
           UA=tibber-exporter/${{ steps.get_version.outputs.version }} (${{ github.server_url}}/${{ github.repository }})
+
+  release-chart:
+    name: Release chart
+    needs: release-docker
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+  release-binaries:
+    name: Release binaries
+    needs: release-chart
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm, arm64]
+        exclude:
+          - goarch: arm
+            goos: windows
+          - goarch: arm64
+            goos: windows
+          - goarch: arm
+            goos: darwin
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get version
+        id: get_version
+        run: "sed -n 's/^version: /version=/p' charts/tibber-exporter/Chart.yaml >> $GITHUB_OUTPUT"
+      - uses: wangyoucao577/go-release-action@v1.35
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          asset_name: "tibber-exporter-${{ steps.get_version.outputs.version }}-${{ matrix.goos }}-${{ matrix.goarch }}"
+          release_tag: "tibber-exporter-${{ steps.get_version.outputs.version }}"
+          ldflags: "-X 'main.userAgent=tibber-exporter/${{ steps.get_version.outputs.version }} (${{ github.server_url}}/${{ github.repository }})'"
