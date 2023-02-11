@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - charts/**
+      - charts/tibber-exporter/Chart.yaml
 
 jobs:
   release-docker:
