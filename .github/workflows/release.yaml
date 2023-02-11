@@ -95,4 +95,5 @@ jobs:
           goarch: ${{ matrix.goarch }}
           asset_name: "tibber-exporter-${{ steps.get_version.outputs.version }}-${{ matrix.goos }}-${{ matrix.goarch }}"
           release_tag: "tibber-exporter-${{ steps.get_version.outputs.version }}"
+          md5sum: false
           ldflags: "-X 'main.userAgent=tibber-exporter/${{ steps.get_version.outputs.version }} (${{ github.server_url}}/${{ github.repository }})'"
