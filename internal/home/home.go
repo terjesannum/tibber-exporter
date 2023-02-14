@@ -85,6 +85,7 @@ func (h *Home) UpdatePrevious(ctx context.Context, client *graphql.Client, res t
 func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl string, token string) {
 	log.Printf("Creating measurements subscription for home %v\n", h.Id)
 	subscriber := graphql.NewSubscriptionClient(wsUrl)
+	subscriber.WithProtocol(graphql.GraphQLWS)
 	subscriber.WithConnectionParams(map[string]interface{}{"token": token})
 	subscriber.WithLog(log.Println)
 	subscriber.WithRetryTimeout(time.Second * 5)

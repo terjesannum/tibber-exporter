@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tibber-exporter
-version: 1.7.0
+version: 1.7.1
 description: Tibber prometheus exporter
 type: application
 keywords:
@@ -14,6 +14,9 @@ maintainers:
     email: terje@offpiste.org
     url: https://github.com/terjesannum
 annotations:
+  artifacthub.io/images: |
+    - name: tibber-exporter
+      image: ghcr.io/terjesannum/tibber-exporter:latest
   artifacthub.io/screenshots: |
     - title: Grafana dashboard
       url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
