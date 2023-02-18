@@ -17,6 +17,10 @@ annotations:
   artifacthub.io/images: |
     - name: tibber-exporter
       image: ghcr.io/terjesannum/tibber-exporter:latest
+      platforms:
+        - linux/amd64
+        - linux/arm64
+        - linux/arm/v7
   artifacthub.io/screenshots: |
     - title: Grafana dashboard
       url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
