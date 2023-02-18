@@ -105,7 +105,13 @@ func main() {
 				s.Address.Country,
 				s.Address.Latitude,
 				s.Address.Longitude,
+				s.TimeZone,
 				s.CurrentSubscription.PriceInfo.Current.Currency,
+			).Set(1)
+			metrics.GridInfo.WithLabelValues(
+				string(s.Id),
+				s.MeteringPointData.GridCompany,
+				s.MeteringPointData.PriceAreaCode,
 			).Set(1)
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {

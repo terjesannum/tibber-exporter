@@ -27,7 +27,18 @@ var (
 			"country",
 			"latitude",
 			"longitude",
+			"timezone",
 			"currency",
+		})
+	GridInfo = promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "tibber_grid_info",
+			Help: "Grid info",
+		},
+		[]string{
+			"home_id",
+			"grid_company",
+			"price_area_code",
 		})
 )
 

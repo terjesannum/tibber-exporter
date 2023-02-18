@@ -94,9 +94,12 @@ Example of metrics provided by this exporter:
 # TYPE tibber_current gauge
 tibber_current{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",line="1"} 0.8 1660135430000
 tibber_current{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",line="3"} 0.4 1660135430000
+# HELP tibber_grid_info Grid info
+# TYPE tibber_grid_info gauge
+tibber_grid_info{grid_company="Elvia AS",home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",price_area_code="NO1"} 1
 # HELP tibber_home_info Home info
 # TYPE tibber_home_info gauge
-tibber_home_info{address1="Bedringens vei 1",address2="",address3="",city="OSLO",country="NO",currency="NOK",home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",latitude="59.9368932",longitude="10.736951",name="My home",postal_code="0450"} 1
+tibber_home_info{address1="Bedringens vei 1",address2="",address3="",city="OSLO",country="NO",currency="NOK",home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",latitude="59.9368932",longitude="10.736951",name="My home",postal_code="0450",timezone="Europe/Oslo"} 1
 # HELP tibber_power_consumption Power consumption
 # TYPE tibber_power_consumption gauge
 tibber_power_consumption{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 47 1660135437500

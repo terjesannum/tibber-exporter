@@ -22,6 +22,11 @@ type HomesQuery struct {
 				Latitude   string
 				Longitude  string
 			}
+			TimeZone          string
+			MeteringPointData struct {
+				GridCompany   string
+				PriceAreaCode string
+			}
 			CurrentSubscription struct {
 				Id        *graphql.ID
 				PriceInfo struct {
