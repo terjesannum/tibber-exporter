@@ -31,7 +31,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           env:
             - name: TIBBER_TOKEN
-              value: '{{ required "Tibber token is required" .Values.tibberToken }}'
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "tibber-exporter.fullname" . }}"
+                  key: token
           args:
             {{- range .Values.liveMeasurements}}
             - --live

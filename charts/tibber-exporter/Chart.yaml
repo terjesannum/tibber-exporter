@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tibber-exporter
-version: 1.8.0
+version: 1.8.1
 description: Tibber prometheus exporter
 type: application
 keywords:
