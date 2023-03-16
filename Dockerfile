@@ -1,4 +1,4 @@
-FROM golang:1.19.4-alpine3.17 as builder
+FROM golang:1.20.2-alpine3.17 as builder
 
 ARG UA="tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
 
