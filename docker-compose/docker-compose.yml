@@ -13,7 +13,7 @@ services:
     restart: always
 
   prometheus:
-    image: prom/prometheus:v2.39.1
+    image: prom/prometheus:v2.42.0
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
@@ -24,7 +24,7 @@ services:
     restart: always
 
   grafana:
-    image: grafana/grafana:9.2.2
+    image: grafana/grafana:9.4.3
     volumes:
       - ./datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml
       - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
