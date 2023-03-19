@@ -60,20 +60,28 @@ type Prices struct {
 }
 
 type LiveMeasurement struct {
-	Timestamp              time.Time
-	Power                  float64
-	MinPower               float64
-	MaxPower               float64
-	AveragePower           float64
-	AccumulatedConsumption float64
-	AccumulatedCost        float64
-	CurrentL1              *float64
-	CurrentL2              *float64
-	CurrentL3              *float64
-	VoltagePhase1          *float64
-	VoltagePhase2          *float64
-	VoltagePhase3          *float64
-	SignalStrength         *float64
+	Timestamp               time.Time
+	Power                   float64
+	MinPower                float64
+	MaxPower                float64
+	AveragePower            float64
+	AccumulatedConsumption  float64
+	AccumulatedCost         float64
+	CurrentL1               *float64
+	CurrentL2               *float64
+	CurrentL3               *float64
+	VoltagePhase1           *float64
+	VoltagePhase2           *float64
+	VoltagePhase3           *float64
+	SignalStrength          *float64
+	AccumulatedProduction   float64
+	AccumulatedReward       *float64
+	PowerProduction         float64
+	PowerReactive           *float64
+	PowerProductionReactive *float64
+	MinPowerProduction      float64
+	MaxPowerProduction      float64
+	PowerFactor             *float64
 }
 
 var PriceLevel = map[string]int{
@@ -91,13 +99,16 @@ type timestampedValue struct {
 }
 
 type TimestampedValues struct {
-	CurrentL1      timestampedValue
-	CurrentL2      timestampedValue
-	CurrentL3      timestampedValue
-	VoltagePhase1  timestampedValue
-	VoltagePhase2  timestampedValue
-	VoltagePhase3  timestampedValue
-	SignalStrength timestampedValue
+	CurrentL1               timestampedValue
+	CurrentL2               timestampedValue
+	CurrentL3               timestampedValue
+	VoltagePhase1           timestampedValue
+	VoltagePhase2           timestampedValue
+	VoltagePhase3           timestampedValue
+	SignalStrength          timestampedValue
+	PowerReactive           timestampedValue
+	PowerProductionReactive timestampedValue
+	PowerFactor             timestampedValue
 }
 
 type EnergyResolution string
@@ -116,6 +127,14 @@ type PreviousQuery struct {
 					Cost        *float64
 				}
 			} `graphql:"consumption(resolution: $resolution, last: 1)"`
+			Production struct {
+				Nodes []struct {
+					From       time.Time
+					To         time.Time
+					Production *float64
+					Profit     *float64
+				}
+			} `graphql:"production(resolution: $resolution, last: 1)"`
 		} `graphql:"home(id: $id)"`
 	}
 }
@@ -124,4 +143,6 @@ type PreviousPower struct {
 	Timestamp   time.Time
 	Consumption *float64
 	Cost        *float64
+	Production  *float64
+	Profit      *float64
 }

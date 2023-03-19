@@ -47,7 +47,7 @@ func (h *Home) UpdatePrices(ctx context.Context, client *graphql.Client) {
 
 func (h *Home) UpdatePrevious(ctx context.Context, client *graphql.Client, res tibber.EnergyResolution) {
 	var prev tibber.PreviousQuery
-	log.Printf("Updating %v consumption for %v\n", res, h.Id)
+	log.Printf("Updating %v data for %v\n", res, h.Id)
 	err := client.Query(ctx, &prev, map[string]interface{}{
 		"id":         h.Id,
 		"resolution": res,
@@ -61,24 +61,42 @@ func (h *Home) UpdatePrevious(ctx context.Context, client *graphql.Client, res t
 		values = &h.PreviousDay
 	}
 	if len(prev.Viewer.Home.Consumption.Nodes) == 0 {
-		log.Printf("Got 0 consumption nodes for %v\n", h.Id)
 		values.Consumption = nil
 		values.Cost = nil
-		return
-	}
-	node := prev.Viewer.Home.Consumption.Nodes[0]
-	now := time.Now()
-	age := now.Sub(node.To).Hours()
-	if res == tibber.ResolutionDaily {
-		age = age / 24
-	}
-	values.Timestamp = now
-	if age < 1 {
-		values.Consumption = node.Consumption
-		values.Cost = node.Cost
 	} else {
-		values.Consumption = nil
-		values.Cost = nil
+		node := prev.Viewer.Home.Consumption.Nodes[0]
+		now := time.Now()
+		age := now.Sub(node.To).Hours()
+		if res == tibber.ResolutionDaily {
+			age = age / 24
+		}
+		values.Timestamp = now
+		if age < 1 {
+			values.Consumption = node.Consumption
+			values.Cost = node.Cost
+		} else {
+			values.Consumption = nil
+			values.Cost = nil
+		}
+	}
+	if len(prev.Viewer.Home.Production.Nodes) == 0 {
+		values.Production = nil
+		values.Profit = nil
+	} else {
+		node := prev.Viewer.Home.Production.Nodes[0]
+		now := time.Now()
+		age := now.Sub(node.To).Hours()
+		if res == tibber.ResolutionDaily {
+			age = age / 24
+		}
+		values.Timestamp = now
+		if age < 1 {
+			values.Production = node.Production
+			values.Profit = node.Profit
+		} else {
+			values.Production = nil
+			values.Profit = nil
+		}
 	}
 }
 
@@ -122,21 +140,40 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl
 				h.Measurements.LiveMeasurement.MinPower = m.LiveMeasurement.MinPower
 				h.Measurements.LiveMeasurement.MaxPower = m.LiveMeasurement.MaxPower
 				h.Measurements.LiveMeasurement.AveragePower = m.LiveMeasurement.AveragePower
+				h.Measurements.LiveMeasurement.PowerProduction = m.LiveMeasurement.PowerProduction
+				h.Measurements.LiveMeasurement.MinPowerProduction = m.LiveMeasurement.MinPowerProduction
+				h.Measurements.LiveMeasurement.MaxPowerProduction = m.LiveMeasurement.MaxPowerProduction
 				// Each hour tibber seems to adjust readings (to official hourly reading?) and the accumulated values could be a bit lower that the previous.
 				// This causes problems for prometheus counters, so skip those values.
-				if m.LiveMeasurement.AccumulatedConsumption > h.Measurements.LiveMeasurement.AccumulatedConsumption ||
+				if m.LiveMeasurement.AccumulatedConsumption >= h.Measurements.LiveMeasurement.AccumulatedConsumption ||
 					m.LiveMeasurement.Timestamp.YearDay() != h.Measurements.LiveMeasurement.Timestamp.YearDay() {
 					h.Measurements.LiveMeasurement.AccumulatedConsumption = m.LiveMeasurement.AccumulatedConsumption
 				} else {
 					log.Printf("Accumulated consumption lower than stored value: %f(%s) < %f(%s)\n",
 						m.LiveMeasurement.AccumulatedConsumption, m.LiveMeasurement.Timestamp, h.Measurements.LiveMeasurement.AccumulatedConsumption, h.Measurements.LiveMeasurement.Timestamp)
 				}
-				if m.LiveMeasurement.AccumulatedCost > h.Measurements.LiveMeasurement.AccumulatedCost ||
+				if m.LiveMeasurement.AccumulatedCost >= h.Measurements.LiveMeasurement.AccumulatedCost ||
 					m.LiveMeasurement.Timestamp.YearDay() != h.Measurements.LiveMeasurement.Timestamp.YearDay() {
 					h.Measurements.LiveMeasurement.AccumulatedCost = m.LiveMeasurement.AccumulatedCost
 				} else {
 					log.Printf("Accumulated cost lower than stored value: %f(%s) < %f(%s)\n",
 						m.LiveMeasurement.AccumulatedCost, m.LiveMeasurement.Timestamp, h.Measurements.LiveMeasurement.AccumulatedCost, h.Measurements.LiveMeasurement.Timestamp)
+				}
+				if m.LiveMeasurement.AccumulatedProduction >= h.Measurements.LiveMeasurement.AccumulatedProduction ||
+					m.LiveMeasurement.Timestamp.YearDay() != h.Measurements.LiveMeasurement.Timestamp.YearDay() {
+					h.Measurements.LiveMeasurement.AccumulatedProduction = m.LiveMeasurement.AccumulatedProduction
+				} else {
+					log.Printf("Accumulated production lower than stored value: %f(%s) < %f(%s)\n",
+						m.LiveMeasurement.AccumulatedProduction, m.LiveMeasurement.Timestamp, h.Measurements.LiveMeasurement.AccumulatedProduction, h.Measurements.LiveMeasurement.Timestamp)
+				}
+				if m.LiveMeasurement.AccumulatedReward != nil {
+					if h.Measurements.LiveMeasurement.AccumulatedReward == nil || *m.LiveMeasurement.AccumulatedReward >= *h.Measurements.LiveMeasurement.AccumulatedReward ||
+						m.LiveMeasurement.Timestamp.YearDay() != h.Measurements.LiveMeasurement.Timestamp.YearDay() {
+						h.Measurements.LiveMeasurement.AccumulatedReward = m.LiveMeasurement.AccumulatedReward
+					} else {
+						log.Printf("Accumulated reward lower than stored value: %f(%s) < %f(%s)\n",
+							*m.LiveMeasurement.AccumulatedReward, m.LiveMeasurement.Timestamp, *h.Measurements.LiveMeasurement.AccumulatedReward, h.Measurements.LiveMeasurement.Timestamp)
+					}
 				}
 				if m.LiveMeasurement.CurrentL1 != nil {
 					h.TimestampedValues.CurrentL1.Timestamp = m.LiveMeasurement.Timestamp
@@ -165,6 +202,18 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl
 				if m.LiveMeasurement.SignalStrength != nil {
 					h.TimestampedValues.SignalStrength.Timestamp = m.LiveMeasurement.Timestamp
 					h.TimestampedValues.SignalStrength.Value = *m.LiveMeasurement.SignalStrength
+				}
+				if m.LiveMeasurement.PowerReactive != nil {
+					h.TimestampedValues.PowerReactive.Timestamp = m.LiveMeasurement.Timestamp
+					h.TimestampedValues.PowerReactive.Value = *m.LiveMeasurement.PowerReactive
+				}
+				if m.LiveMeasurement.PowerProductionReactive != nil {
+					h.TimestampedValues.PowerProductionReactive.Timestamp = m.LiveMeasurement.Timestamp
+					h.TimestampedValues.PowerProductionReactive.Value = *m.LiveMeasurement.PowerProductionReactive
+				}
+				if m.LiveMeasurement.PowerFactor != nil {
+					h.TimestampedValues.PowerFactor.Timestamp = m.LiveMeasurement.Timestamp
+					h.TimestampedValues.PowerFactor.Value = *m.LiveMeasurement.PowerFactor
 				}
 				h.Measurements.LiveMeasurement.Timestamp = m.LiveMeasurement.Timestamp
 			}
