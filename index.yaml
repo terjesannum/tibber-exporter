@@ -15,6 +15,38 @@ entries:
         - title: Grafana dashboard without Pulse
           url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
     apiVersion: v2
+    created: "2023-03-22T14:58:21.694644998Z"
+    description: Tibber prometheus exporter
+    digest: bde2aea22d041249818ee2b05db831722e03b2e621677fe75af307276e78e2e4
+    home: https://github.com/terjesannum/tibber-exporter
+    keywords:
+    - tibber
+    - prometheus
+    - grafana
+    - monitoring
+    maintainers:
+    - email: terje@offpiste.org
+      name: Terje Sannum
+      url: https://github.com/terjesannum
+    name: tibber-exporter
+    type: application
+    urls:
+    - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-2.0.0/tibber-exporter-2.0.0.tgz
+    version: 2.0.0
+  - annotations:
+      artifacthub.io/images: |
+        - name: tibber-exporter
+          image: ghcr.io/terjesannum/tibber-exporter:latest
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/screenshots: |
+        - title: Grafana dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
+        - title: Grafana dashboard without Pulse
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
+    apiVersion: v2
     created: "2023-02-21T20:34:40.521017673Z"
     description: Tibber prometheus exporter
     digest: 702767f8b1c5cc51afb042f495a14d118d42f86ac67104c26804d76be5de2e57
@@ -609,4 +641,4 @@ entries:
     urls:
     - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.0.0/tibber-exporter-1.0.0.tgz
     version: 1.0.0
-generated: "2023-02-21T20:34:40.521355376Z"
+generated: "2023-03-22T14:58:21.694886403Z"
