@@ -27,8 +27,6 @@ A `TIBBER_TOKEN` is required to use the Tibber API, go to [developer.tibber.com]
 
 Regardless of how you run this program, it is important to run it with an automatic restart mechanism. If the live feed from Tibber for some reason is interrupted or not available, the program will take a short pause and exit. The pause is to avoid a restart loop and trigger rate limiting in the Tibber API, and just exiting and restarting is better than trying to handle every possible error situation.
 
-### Tibber bugs
-
 The automatic restart on errors in the live feed will make the exporter recover from most error situations. However, there is a bug in the Tibber service which sometimes fails to report that a home has the live feed feature. To handle this situation, the exporter has a command line option `--live` that can be used to force the exporter to always start the live feed. Therefore, if you have the live feature for your home, it's recommended to run the exporter with `--live <home id>` to ensure that the live feed is always started.
 
 ### Docker compose
