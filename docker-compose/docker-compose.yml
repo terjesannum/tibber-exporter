@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - tibber
+      - prometheus
     environment:
       TIBBER_TOKEN: $TIBBER_TOKEN
     restart: always
@@ -20,7 +20,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - tibber
+      - prometheus
     restart: always
 
   grafana:
@@ -35,7 +35,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - tibber
+      - prometheus
     entrypoint:
       - /grafana.sh
     environment:
@@ -45,7 +45,7 @@ services:
     restart: always
     
 networks:
-  tibber: {}
+  prometheus: {}
 
 volumes:
   grafana_data: {}
