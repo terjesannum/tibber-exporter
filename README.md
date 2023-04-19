@@ -89,98 +89,39 @@ Import the [dashboard](grafana/dashboard.json) or use id `16804` and import from
 
 ## Metrics
 
-Example of metrics provided by this exporter:
+| Name                                     | Description                                          |
+|------------------------------------------|------------------------------------------------------|
+| tibber_home_info                         | Home info                                            |
+| tibber_grid_info                         | Power grid info                                      |
+| tibber_power_price                       | Current power price                                  |
+| tibber_power_price_level                 | Current price level                                  |
+| tibber_power_consumption                 | Current power consumption                            |
+| tibber_power_consumption_day_avg         | Average power consumption today                      |
+| tibber_power_consumption_day_min         | Minimum power consumption today                      |
+| tibber_power_consumption_day_max         | Maximum power consumption today                      |
+| tibber_power_consumption_day_total       | Total power consumption today                        |
+| tibber_power_consumption_previous_hour   | Total power consumption previous hour                |
+| tibber_power_consumption_previous_day    | Total power consumption yesterday                    |
+| tibber_power_consumption_reactive        | Current reactive consumption                         |
+| tibber_power_cost_day_total              | Total power cost today                               |
+| tibber_power_cost_previous_hour_total    | Total power cost previous hour                       |
+| tibber_power_cost_previous_day_total     | Total power cost yesterday                           |
+| tibber_power_production                  | Current power production                             |
+| tibber_power_production_day_min          | Minimum power production today                       |
+| tibber_power_production_day_max          | Maximum power production today                       |
+| tibber_power_production_day_total        | Total power production today                         |
+| tibber_power_production_previous_day     | Total power production yesterday                     |
+| tibber_power_production_reward_day_total | Total power production reward today                  |
+| tibber_power_production_reactive         | Current net reactive production                      |
+| tibber_power_factor                      | Current power factor (active power / apparent power) |
+| tibber_power_profit_previous_day         | Total power profit yesterday                         |
+| tibber_voltage                           | Phase voltage                                        |
+| tibber_current                           | Line current                                         |
+| tibber_signal_strength                   | Tibber Pulse signal strength                         |
 
-```
-# HELP tibber_current Line current
-# TYPE tibber_current gauge
-tibber_current{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",line="1"} 0.8 1660135430000
-tibber_current{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",line="3"} 0.4 1660135430000
-# HELP tibber_grid_info Grid info
-# TYPE tibber_grid_info gauge
-tibber_grid_info{grid_company="Elvia AS",home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",price_area_code="NO1"} 1
-# HELP tibber_home_info Home info
-# TYPE tibber_home_info gauge
-tibber_home_info{address1="Bedringens vei 1",address2="",address3="",city="OSLO",country="NO",currency="NOK",home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",latitude="59.9368932",longitude="10.736951",name="My home",postal_code="0450",timezone="Europe/Oslo"} 1
-# HELP tibber_power_consumption Power consumption
-# TYPE tibber_power_consumption gauge
-tibber_power_consumption{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 47 1660135437500
-# HELP tibber_power_consumption_day_avg Average power consumtion since midnight
-# TYPE tibber_power_consumption_day_avg gauge
-tibber_power_consumption_day_avg{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 218.7 1660135437500
-# HELP tibber_power_consumption_day_max Maximum power consumtion since midnight
-# TYPE tibber_power_consumption_day_max gauge
-tibber_power_consumption_day_max{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 2116 1660135437500
-# HELP tibber_power_consumption_day_min Minimum power consumtion since midnight
-# TYPE tibber_power_consumption_day_min gauge
-tibber_power_consumption_day_min{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 44 1660135437500
-# HELP tibber_power_consumption_day_total Total power consumption since midnight
-# TYPE tibber_power_consumption_day_total counter
-tibber_power_consumption_day_total{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 3.313674 1660135437500
-# HELP tibber_power_consumption_previous_day Power consumption previous day
-# TYPE tibber_power_consumption_previous_day gauge
-tibber_power_consumption_previous_day{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 29.741 1660135437500
-# HELP tibber_power_consumption_previous_hour Power consumption previous hour
-# TYPE tibber_power_consumption_previous_hour gauge
-tibber_power_consumption_previous_hour{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 1.82 1660135437500
-# HELP tibber_power_consumption_reactive Reactive consumption
-# TYPE tibber_power_consumption_reactive gauge
-tibber_power_consumption_reactive{home_id="96a14971-525a-4420-aae9-e5aedaa129ff"} 0 1660135437500
-# HELP tibber_power_cost_day_total Total power cost since midnight
-# TYPE tibber_power_cost_day_total counter
-tibber_power_cost_day_total{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 10.981923 1660135437500
-# HELP tibber_power_cost_previous_day Power cost previous day
-# TYPE tibber_power_cost_previous_day gauge
-tibber_power_cost_previous_day{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 133.901981625 1660135437500
-# HELP tibber_power_cost_previous_hour Power cost previous hour
-# TYPE tibber_power_cost_previous_hour gauge
-tibber_power_cost_previous_hour{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 7.37839375 1660135437500
-# HELP tibber_power_factor Power factor (active power / apparent power)
-# TYPE tibber_power_factor gauge
-tibber_power_factor{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 0.764 1660135437500
-# HELP tibber_power_price Power price
-# TYPE tibber_power_price gauge
-tibber_power_price{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",type="energy"} 2.5294
-tibber_power_price{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",type="tax"} 0.6423
-tibber_power_price{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",type="total"} 3.1717
-# HELP tibber_power_price_level Power price level
-# TYPE tibber_power_price_level gauge
-tibber_power_price_level{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 3
-# HELP tibber_power_production Power production
-# TYPE tibber_power_production gauge
-tibber_power_production{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 0 1660135437500
-# HELP tibber_power_production_day_max Maximum power production since midnight
-# TYPE tibber_power_production_day_max gauge
-tibber_power_production_day_max{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 6039 1660135437500
-# HELP tibber_power_production_day_min Minimum power production since midnight
-# TYPE tibber_power_production_day_min gauge
-tibber_power_production_day_min{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 0 1660135437500
-# HELP tibber_power_production_day_total Total power production since midnight
-# TYPE tibber_power_production_day_total counter
-tibber_power_production_day_total{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 8.628 1660135437500
-# HELP tibber_power_production_previous_day Power production previous day
-# TYPE tibber_power_production_previous_day gauge
-tibber_power_production_previous_day{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 0.08 1679415318345
-# HELP tibber_power_production_reactive Reactive production
-# TYPE tibber_power_production_reactive gauge
-tibber_power_production_reactive{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 798 1660135437500
-# HELP tibber_power_production_reward_day_total Total power production reward since midnight
-# TYPE tibber_power_production_reward_day_total counter
-tibber_power_production_reward_day_total{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 9.153425 1660135437500
-# HELP tibber_power_profit_previous_day Power profit previous day
-# TYPE tibber_power_profit_previous_day gauge
-tibber_power_profit_previous_day{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} 0.08809567 1660135437500
-# HELP tibber_signal_strength Signal strength
-# TYPE tibber_signal_strength gauge
-tibber_signal_strength{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de"} -60 1660135347500
-# HELP tibber_voltage Phase voltage
-# TYPE tibber_voltage gauge
-tibber_voltage{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",phase="1"} 234.6 1660135430000
-tibber_voltage{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",phase="2"} 234.1 1660135430000
-tibber_voltage{home_id="69e3138e-8a89-43d3-8179-f5e1cb2199de",phase="3"} 234.9 1660135430000
-```
+More infomation can be found in the [Tibber API documentation](https://developer.tibber.com/docs/reference).
 
-### Consider becoming a Tibber customer?
+## Consider becoming a Tibber customer?
 
 I would be happy if you use [this referral code](https://invite.tibber.com/qandobma). That will give each of us a bonus to use on stuff like Tibber Pulse :smile:
 
