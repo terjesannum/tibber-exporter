@@ -47,10 +47,10 @@ func (sa *stringArgs) Set(s string) error {
 
 func init() {
 	flag.StringVar(&token, "token", os.Getenv("TIBBER_TOKEN"), "Tibber API token")
-	flag.StringVar(&liveUrl, "live-url", "", "Websocket url for live measurements")
-	flag.Var(&liveMeasurements, "live", "Id of home to expect having live measurements")
-	flag.Var(&disableLiveMeasurements, "disable-live", "Id of home to disable live measurements")
-	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests (defaults to :8080)")
+	flag.StringVar(&liveUrl, "live-url", "", "Override websocket url for live measurements")
+	flag.Var(&liveMeasurements, "live", "Ids of homes to always start live measurements")
+	flag.Var(&disableLiveMeasurements, "disable-live", "Ids of homes to disable live measurements")
+	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests")
 	flag.Parse()
 	if userAgent == "" {
 		userAgent = "tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
