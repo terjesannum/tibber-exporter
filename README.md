@@ -67,6 +67,14 @@ helm install tibber-exporter tibber-exporter/tibber-exporter --set tibberToken=.
 docker run -d -p 8080:8080 -e TIBBER_TOKEN=... --restart always ghcr.io/terjesannum/tibber-exporter:latest
 ```
 
+### Binary
+
+Run with your Tibber token in the `TIBBER_TOKEN` environment variable, or specify it with the `-token` flag:
+
+```sh
+tibber-exporter -token ...
+```
+
 ## Prometheus
 
 Prometheus need to be configured to scrape the exporter, so add a scrape job to `/etc/prometheus/prometheus.yml`:
