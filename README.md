@@ -103,6 +103,8 @@ Import the [dashboard](grafana/dashboard.json) or use id `16804` and import from
 | tibber_grid_info                         | Power grid info                                      |
 | tibber_power_price                       | Current power price                                  |
 | tibber_power_price_level                 | Current price level                                  |
+| tibber_power_price_next_hour             | Power price next hour                                |
+| tibber_power_price_level_next_hour       | Price level next hour                                |
 | tibber_power_consumption                 | Current power consumption                            |
 | tibber_power_consumption_day_avg         | Average power consumption today                      |
 | tibber_power_consumption_day_min         | Minimum power consumption today                      |

@@ -42,17 +42,22 @@ type HomesQuery struct {
 	}
 }
 
+type Price struct {
+	StartsAt *time.Time
+	Total    *float64
+	Energy   *float64
+	Tax      *float64
+	Level    *string
+}
+
 type Prices struct {
 	Viewer struct {
 		Home struct {
 			CurrentSubscription struct {
 				PriceInfo struct {
-					Current struct {
-						Total  *float64
-						Energy *float64
-						Tax    *float64
-						Level  *string
-					}
+					Current  Price
+					Today    []Price
+					Tomorrow []Price
 				}
 			}
 		} `graphql:"home(id: $id)"`

@@ -45,6 +45,18 @@ func (h *Home) UpdatePrices(ctx context.Context, client *graphql.Client) {
 	h.Prices = prices
 }
 
+func (h *Home) GetPrice(t time.Time) *tibber.Price {
+	p := append(h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Today, h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Tomorrow...)
+	i := 0
+	for i < len(p) && t.After(*p[i].StartsAt) {
+		i++
+	}
+	if i < len(p) {
+		return &p[i-1]
+	}
+	return nil
+}
+
 func (h *Home) UpdatePrevious(ctx context.Context, client *graphql.Client, res tibber.EnergyResolution) {
 	var prev tibber.PreviousQuery
 	log.Printf("Updating %v data for %v\n", res, h.Id)
