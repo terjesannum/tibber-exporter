@@ -51,6 +51,8 @@ func (h *Home) GetPricesHandler(w http.ResponseWriter, r *http.Request) {
 		prices = h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Today
 	} else if r.FormValue("period") == "tomorrow" {
 		prices = h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Tomorrow
+	} else if r.FormValue("period") == "now" {
+		prices = h.GetPrices(time.Now())
 	} else {
 		prices = append(h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Today, h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Tomorrow...)
 	}
