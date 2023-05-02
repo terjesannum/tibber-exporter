@@ -1,6 +1,7 @@
 package tibber
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/hasura/go-graphql-client"
@@ -48,6 +49,25 @@ type Price struct {
 	Energy   *float64
 	Tax      *float64
 	Level    *string
+}
+
+// Return price level as int also in json so value mappings in Grafana will be the same as for Prometheus metrics
+func (p Price) MarshalJSON() ([]byte, error) {
+	type priceJSON struct {
+		StartsAt *time.Time `json:"startsAt"`
+		Total    *float64   `json:"total"`
+		Energy   *float64   `json:"energy"`
+		Tax      *float64   `json:"tax"`
+		Level    int        `json:"level"`
+	}
+	pj := priceJSON{
+		StartsAt: p.StartsAt,
+		Total:    p.Total,
+		Energy:   p.Energy,
+		Tax:      p.Tax,
+		Level:    PriceLevel[*p.Level],
+	}
+	return json.Marshal(pj)
 }
 
 type Prices struct {

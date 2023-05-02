@@ -45,6 +45,19 @@ func (h *Home) UpdatePrices(ctx context.Context, client *graphql.Client) {
 	h.Prices = prices
 }
 
+func (h *Home) GetPricesHandler(w http.ResponseWriter, r *http.Request) {
+	var prices []tibber.Price
+	if r.FormValue("period") == "today" {
+		prices = h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Today
+	} else if r.FormValue("period") == "tomorrow" {
+		prices = h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Tomorrow
+	} else {
+		prices = append(h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Today, h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Tomorrow...)
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(prices)
+}
+
 func (h *Home) GetPrice(t time.Time) *tibber.Price {
 	p := append(h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Today, h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Tomorrow...)
 	i := 0

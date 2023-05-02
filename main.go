@@ -123,6 +123,7 @@ func main() {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}
 			h.UpdatePrices(ctx, client)
+			http.HandleFunc(fmt.Sprintf("/home/%s/prices", h.Id), h.GetPricesHandler)
 			ticker := time.NewTicker(time.Minute)
 			quit := make(chan struct{})
 			go func() {
