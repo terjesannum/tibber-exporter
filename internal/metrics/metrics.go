@@ -491,37 +491,37 @@ func (c *HomeCollector) Collect(ch chan<- prometheus.Metric) {
 			float64(tibber.PriceLevel[string(*c.home.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Current.Level)]),
 		)
 	}
-	p := c.home.GetPrice(time.Now().Add(time.Hour))
-	if p != nil {
-		if p.Total != nil {
+	p := c.home.GetPrices(time.Now().Add(time.Hour))
+	if p != nil && len(p) > 0 {
+		if p[0].Total != nil {
 			ch <- prometheus.MustNewConstMetric(
 				c.nextHourPrice,
 				prometheus.GaugeValue,
-				*p.Total,
+				*p[0].Total,
 				"total",
 			)
 		}
-		if p.Energy != nil {
+		if p[0].Energy != nil {
 			ch <- prometheus.MustNewConstMetric(
 				c.nextHourPrice,
 				prometheus.GaugeValue,
-				*p.Energy,
+				*p[0].Energy,
 				"energy",
 			)
 		}
-		if p.Tax != nil {
+		if p[0].Tax != nil {
 			ch <- prometheus.MustNewConstMetric(
 				c.nextHourPrice,
 				prometheus.GaugeValue,
-				*p.Tax,
+				*p[0].Tax,
 				"tax",
 			)
 		}
-		if p.Level != nil {
+		if p[0].Level != nil {
 			ch <- prometheus.MustNewConstMetric(
 				c.nextHourPriceLevel,
 				prometheus.GaugeValue,
-				float64(tibber.PriceLevel[string(*p.Level)]),
+				float64(tibber.PriceLevel[string(*p[0].Level)]),
 			)
 		}
 	}

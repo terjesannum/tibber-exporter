@@ -58,14 +58,14 @@ func (h *Home) GetPricesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(prices)
 }
 
-func (h *Home) GetPrice(t time.Time) *tibber.Price {
+func (h *Home) GetPrices(t time.Time) []tibber.Price {
 	p := append(h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Today, h.Prices.Viewer.Home.CurrentSubscription.PriceInfo.Tomorrow...)
 	i := 0
 	for i < len(p) && t.After(*p[i].StartsAt) {
 		i++
 	}
 	if i < len(p) {
-		return &p[i-1]
+		return p[i-1:]
 	}
 	return nil
 }
