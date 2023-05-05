@@ -30,6 +30,7 @@ services:
       - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ../grafana/dashboard.json:/dashboard.json
       - ../grafana/dashboard-without-pulse.json:/dashboard-without-pulse.json
+      - ../grafana/dashboard-prices.json:/dashboard-prices.json
       - ./grafana.sh:/grafana.sh
       - grafana_data:/var/lib/grafana
     ports:
