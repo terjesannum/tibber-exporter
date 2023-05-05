@@ -14,6 +14,40 @@ entries:
           url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
         - title: Grafana dashboard without Pulse
           url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
+        - title: Prices dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-prices.png
+    apiVersion: v2
+    created: "2023-05-05T15:27:25.459285557Z"
+    description: Tibber prometheus exporter
+    digest: 7a5fae22c5aa86183c22034d2e9824dd6beff85ef82115ae021213110988450a
+    home: https://github.com/terjesannum/tibber-exporter
+    keywords:
+    - tibber
+    - prometheus
+    - grafana
+    - monitoring
+    maintainers:
+    - email: terje@offpiste.org
+      name: Terje Sannum
+      url: https://github.com/terjesannum
+    name: tibber-exporter
+    type: application
+    urls:
+    - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-3.0.0/tibber-exporter-3.0.0.tgz
+    version: 3.0.0
+  - annotations:
+      artifacthub.io/images: |
+        - name: tibber-exporter
+          image: ghcr.io/terjesannum/tibber-exporter:latest
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/screenshots: |
+        - title: Grafana dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
+        - title: Grafana dashboard without Pulse
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
     apiVersion: v2
     created: "2023-04-23T07:15:57.816380547Z"
     description: Tibber prometheus exporter
@@ -737,4 +771,4 @@ entries:
     urls:
     - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.0.0/tibber-exporter-1.0.0.tgz
     version: 1.0.0
-generated: "2023-04-23T07:15:57.816705951Z"
+generated: "2023-05-05T15:27:25.460362533Z"
