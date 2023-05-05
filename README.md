@@ -17,6 +17,22 @@ If you don't have a device for live measurements, only the power price metrics w
 
 ![Grafana dashboard without pulse](grafana/dashboard-without-pulse.png)
 
+#### Next day prices
+
+The Tibber API provides power prices for the current and the next day, but storing future data can't be done easily in Prometheus. To be able to show future power prices, this exporter also has a JSON service which can be queried to get this data. In Grafana this can be used with the [JSON API datasource plugin](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/).
+
+| Endpoint                                  | Description                                                |
+|-------------------------------------------|------------------------------------------------------------|
+| `/homes/<home id>/prices`                 | Power prices for today and tomorrow (if available)         |
+| `/homes/<home id>/prices?period=now`      | Power prices from current time and tomorrow (if available) |
+| `/homes/<home id>/prices?period=today`    | Power prices for today                                     |
+| `/homes/<home id>/prices?period=tomorrow` | Power prices for tomorrow (if available)                   |
+
+Tomorrow prices are usually available around 13:00 each day.
+
+See the [prices dashboard](grafana/dashboard-prices.json) for some example panels which use this datasource.
+
+![Grafana prices dashboard](grafana/dashboard-prices.png)
 
 ## Running
 
