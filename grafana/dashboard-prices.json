@@ -7,14 +7,6 @@
       "type": "datasource",
       "pluginId": "marcusolsson-json-datasource",
       "pluginName": "JSON API"
-    },
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
     }
   ],
   "__elements": {},
@@ -36,12 +28,6 @@
       "id": "marcusolsson-json-datasource",
       "name": "JSON API",
       "version": "1.3.5"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
     },
     {
       "type": "panel",
@@ -134,12 +120,12 @@
                   {
                     "options": {
                       "1": {
-                        "color": "dark-blue",
+                        "color": "blue",
                         "index": 0,
                         "text": "Very cheap"
                       },
                       "2": {
-                        "color": "semi-dark-blue",
+                        "color": "dark-blue",
                         "index": 1,
                         "text": "Cheap"
                       },
@@ -400,6 +386,7 @@
           },
           "decimals": 2,
           "mappings": [],
+          "noValue": "N/A",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -551,10 +538,10 @@
       {
         "current": {},
         "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_TIBBER-EXPORTER}"
         },
-        "definition": "tibber_home_info",
+        "definition": "$map($, function($item) {\n  $item.homeId & \" \" & $item.name\n})",
         "hide": 0,
         "includeAll": false,
         "label": "Home",
@@ -562,11 +549,19 @@
         "name": "home",
         "options": [],
         "query": {
-          "query": "tibber_home_info",
-          "refId": "StandardVariableQuery"
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($, function($item) {\n  $item.homeId & \" \" & $item.name\n})",
+              "language": "jsonata"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "urlPath": "/homes"
         },
         "refresh": 1,
-        "regex": "/.*home_id=\"(?<value>[^\"]+)(?:.*name=\"(?<text>[^\"]+))?/",
+        "regex": "/(?<value>\\S+) (?<text>.*)?/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
@@ -594,6 +589,6 @@
   "timezone": "",
   "title": "Tibber power prices",
   "uid": "eb82de43-b4e7-4f06-b4ca-a076f9da8dc5",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
