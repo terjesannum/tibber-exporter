@@ -23,6 +23,7 @@ The Tibber API provides power prices for the current and the next day, but stori
 
 | Endpoint                                  | Description                                               |
 |-------------------------------------------|-----------------------------------------------------------|
+| `/homes`                                  | Available homes                                           |
 | `/homes/<home id>/prices`                 | Power prices for today and tomorrow (if available)        |
 | `/homes/<home id>/prices?period=now`      | Power prices from now and through tomorrow (if available) |
 | `/homes/<home id>/prices?period=today`    | Power prices for today                                    |

@@ -43,6 +43,48 @@ type HomesQuery struct {
 	}
 }
 
+func (hq HomesQuery) MarshalJSON() ([]byte, error) {
+	type homeJSON struct {
+		Id            graphql.ID `json:"homeId"`
+		AppNickname   string     `json:"name,omitempty"`
+		Address1      string     `json:"address1,omitempty"`
+		Address2      string     `json:"address2,omitempty"`
+		Address3      string     `json:"address3,omitempty"`
+		City          string     `json:"city,omitempty"`
+		PostalCode    string     `json:"postalCode,omitempty"`
+		Country       string     `json:"country,omitempty"`
+		Latitude      string     `json:"latitude,omitempty"`
+		Longitude     string     `json:"longitude,omitempty"`
+		TimeZone      string     `json:"timezone,omitempty"`
+		GridCompany   string     `json:"gridCompany,omitempty"`
+		PriceAreaCode string     `json:"priceAreaCode,omitempty"`
+		Currency      string     `json:"currency,omitempty"`
+	}
+	var homes []homeJSON
+	for _, home := range hq.Viewer.Homes {
+		if home.CurrentSubscription.Id != nil {
+			hj := homeJSON{
+				Id:            home.Id,
+				AppNickname:   home.AppNickname,
+				Address1:      home.Address.Address1,
+				Address2:      home.Address.Address2,
+				Address3:      home.Address.Address3,
+				City:          home.Address.City,
+				PostalCode:    home.Address.PostalCode,
+				Country:       home.Address.Country,
+				Latitude:      home.Address.Latitude,
+				Longitude:     home.Address.Longitude,
+				TimeZone:      home.TimeZone,
+				GridCompany:   home.MeteringPointData.GridCompany,
+				PriceAreaCode: home.MeteringPointData.PriceAreaCode,
+				Currency:      home.CurrentSubscription.PriceInfo.Current.Currency,
+			}
+			homes = append(homes, hj)
+		}
+	}
+	return json.Marshal(homes)
+}
+
 type Price struct {
 	StartsAt *time.Time
 	Total    *float64

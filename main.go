@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -69,6 +70,11 @@ func (t *transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return http.DefaultTransport.RoundTrip(req)
 }
 
+func getHomesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(homesQuery)
+}
+
 func main() {
 	log.Printf("Starting %s\n", userAgent)
 	ctx := context.Background()
@@ -79,6 +85,7 @@ func main() {
 	if err != nil {
 		exit(fmt.Sprintf("Error getting homes: %v. Exiting...", err))
 	}
+	http.HandleFunc("/homes", getHomesHandler)
 	wsUrl := homesQuery.Viewer.WebsocketSubscriptionUrl
 	log.Printf("Websocket url: %s\n", wsUrl)
 	if liveUrl != "" && liveUrl != wsUrl {
