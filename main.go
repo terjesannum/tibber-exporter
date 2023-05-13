@@ -166,7 +166,7 @@ func main() {
 
 	log.Println("Starting http listener")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Tibber prometheus exporter")
+		fmt.Fprintln(w, "Tibber exporter")
 	})
 	http.Handle("/metrics", promhttp.Handler())
 	err = http.ListenAndServe(listenAddress, nil)

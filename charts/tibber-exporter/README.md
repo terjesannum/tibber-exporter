@@ -1,4 +1,4 @@
-# Tibber prometheus exporter
+# Tibber exporter
 
 Monitor your power usage and costs with Tibber Pulse, Prometheus and Grafana.
 
