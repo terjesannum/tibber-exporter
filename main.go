@@ -121,6 +121,7 @@ func main() {
 				s.MeteringPointData.PriceAreaCode,
 			).Set(1)
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
+			log.Printf("Realtime consumption enabled for %v: %v\n", s.Id, s.Features.RealTimeConsumptionEnabled)
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
 				go h.SubscribeMeasurements(ctx, hc, wsUrl, token)
