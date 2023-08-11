@@ -114,37 +114,37 @@ Import the [dashboard](grafana/dashboard.json) or use id `16804` and import from
 
 ## Metrics
 
-| Name                                     | Description                                          |
-|------------------------------------------|------------------------------------------------------|
-| tibber_home_info                         | Home info                                            |
-| tibber_grid_info                         | Power grid info                                      |
-| tibber_power_price                       | Current power price                                  |
-| tibber_power_price_level                 | Current price level                                  |
-| tibber_power_price_next_hour             | Power price next hour                                |
-| tibber_power_price_level_next_hour       | Price level next hour                                |
-| tibber_power_consumption                 | Current power consumption                            |
-| tibber_power_consumption_day_avg         | Average power consumption today                      |
-| tibber_power_consumption_day_min         | Minimum power consumption today                      |
-| tibber_power_consumption_day_max         | Maximum power consumption today                      |
-| tibber_power_consumption_day_total       | Total power consumption today                        |
-| tibber_power_consumption_previous_hour   | Total power consumption previous hour                |
-| tibber_power_consumption_previous_day    | Total power consumption yesterday                    |
-| tibber_power_consumption_reactive        | Current reactive consumption                         |
-| tibber_power_cost_day_total              | Total power cost today                               |
-| tibber_power_cost_previous_hour_total    | Total power cost previous hour                       |
-| tibber_power_cost_previous_day_total     | Total power cost yesterday                           |
-| tibber_power_production                  | Current power production                             |
-| tibber_power_production_day_min          | Minimum power production today                       |
-| tibber_power_production_day_max          | Maximum power production today                       |
-| tibber_power_production_day_total        | Total power production today                         |
-| tibber_power_production_previous_day     | Total power production yesterday                     |
-| tibber_power_production_reward_day_total | Total power production reward today                  |
-| tibber_power_production_reactive         | Current net reactive production                      |
-| tibber_power_factor                      | Current power factor (active power / apparent power) |
-| tibber_power_profit_previous_day         | Total power profit yesterday                         |
-| tibber_voltage                           | Phase voltage                                        |
-| tibber_current                           | Line current                                         |
-| tibber_signal_strength                   | Tibber Pulse signal strength                         |
+| Name                                     | Description                                          | Type    |
+|------------------------------------------|------------------------------------------------------|---------|
+| tibber_home_info                         | Home info                                            | Gauge   |
+| tibber_grid_info                         | Power grid info                                      | Gauge   |
+| tibber_power_price                       | Current power price                                  | Gauge   |
+| tibber_power_price_level                 | Current price level                                  | Gauge   |
+| tibber_power_price_next_hour             | Power price next hour                                | Gauge   |
+| tibber_power_price_level_next_hour       | Price level next hour                                | Gauge   |
+| tibber_power_consumption                 | Current power consumption                            | Gauge   |
+| tibber_power_consumption_day_avg         | Average power consumption today                      | Gauge   |
+| tibber_power_consumption_day_min         | Minimum power consumption today                      | Gauge   |
+| tibber_power_consumption_day_max         | Maximum power consumption today                      | Gauge   |
+| tibber_power_consumption_day_total       | Total power consumption today                        | Counter |
+| tibber_power_consumption_previous_hour   | Total power consumption previous hour                | Gauge   |
+| tibber_power_consumption_previous_day    | Total power consumption yesterday                    | Gauge   |
+| tibber_power_consumption_reactive        | Current reactive consumption                         | Gauge   |
+| tibber_power_cost_day_total              | Total power cost today                               | Gauge   |
+| tibber_power_cost_previous_hour_total    | Total power cost previous hour                       | Gauge   |
+| tibber_power_cost_previous_day_total     | Total power cost yesterday                           | Counter |
+| tibber_power_production                  | Current power production                             | Gauge   |
+| tibber_power_production_day_min          | Minimum power production today                       | Gauge   |
+| tibber_power_production_day_max          | Maximum power production today                       | Gauge   |
+| tibber_power_production_day_total        | Total power production today                         | Counter |
+| tibber_power_production_previous_day     | Total power production yesterday                     | Gauge   |
+| tibber_power_production_reward_day_total | Total power production reward today                  | Gauge   |
+| tibber_power_production_reactive         | Current net reactive production                      | Gauge   |
+| tibber_power_factor                      | Current power factor (active power / apparent power) | Gauge   |
+| tibber_power_profit_previous_day         | Total power profit yesterday                         | Gauge   |
+| tibber_voltage                           | Phase voltage                                        | Gauge   |
+| tibber_current                           | Line current                                         | Gauge   |
+| tibber_signal_strength                   | Tibber Pulse signal strength                         | Gauge   |
 
 More infomation can be found in the [Tibber API documentation](https://developer.tibber.com/docs/reference).
 
