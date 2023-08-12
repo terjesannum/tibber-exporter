@@ -131,16 +131,18 @@ Import the [dashboard](grafana/dashboard.json) or use id `16804` and import from
 | tibber_power_consumption_previous_day    | Total power consumption yesterday                    | Gauge   |
 | tibber_power_consumption_reactive        | Current reactive consumption                         | Gauge   |
 | tibber_power_cost_day_total              | Total power cost today                               | Gauge   |
-| tibber_power_cost_previous_hour_total    | Total power cost previous hour                       | Gauge   |
-| tibber_power_cost_previous_day_total     | Total power cost yesterday                           | Counter |
+| tibber_power_cost_previous_hour          | Total power cost previous hour                       | Gauge   |
+| tibber_power_cost_previous_day           | Total power cost yesterday                           | Counter |
 | tibber_power_production                  | Current power production                             | Gauge   |
 | tibber_power_production_day_min          | Minimum power production today                       | Gauge   |
 | tibber_power_production_day_max          | Maximum power production today                       | Gauge   |
 | tibber_power_production_day_total        | Total power production today                         | Counter |
+| tibber_power_production_previous_hour    | Total power production previous hour                 | Gauge   |
 | tibber_power_production_previous_day     | Total power production yesterday                     | Gauge   |
 | tibber_power_production_reward_day_total | Total power production reward today                  | Gauge   |
 | tibber_power_production_reactive         | Current net reactive production                      | Gauge   |
 | tibber_power_factor                      | Current power factor (active power / apparent power) | Gauge   |
+| tibber_power_profit_previous_hour        | Total power profit previous hour                     | Gauge   |
 | tibber_power_profit_previous_day         | Total power profit yesterday                         | Gauge   |
 | tibber_voltage                           | Phase voltage                                        | Gauge   |
 | tibber_current                           | Line current                                         | Gauge   |
