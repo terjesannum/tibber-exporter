@@ -20,13 +20,14 @@ import (
 )
 
 var (
-	token                   string
-	homesQuery              tibber.HomesQuery
-	liveUrl                 string
-	liveMeasurements        stringArgs
-	disableLiveMeasurements stringArgs
-	listenAddress           string
-	userAgent               string
+	token                    string
+	homesQuery               tibber.HomesQuery
+	liveUrl                  string
+	liveMeasurements         stringArgs
+	disableLiveMeasurements  stringArgs
+	disableSubscriptionCheck bool
+	listenAddress            string
+	userAgent                string
 )
 
 type (
@@ -51,6 +52,7 @@ func init() {
 	flag.StringVar(&liveUrl, "live-url", "", "Override websocket url for live measurements")
 	flag.Var(&liveMeasurements, "live", "Ids of homes to always start live measurements")
 	flag.Var(&disableLiveMeasurements, "disable-live", "Ids of homes to disable live measurements")
+	flag.BoolVar(&disableSubscriptionCheck, "disable-subscription-check", false, "Disable check on active Tibber subscription")
 	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests")
 	flag.Parse()
 	if userAgent == "" {
@@ -94,12 +96,18 @@ func main() {
 	}
 	var started []string
 	for _, s := range homesQuery.Viewer.Homes {
+		s := s
 		log.Printf("Found home: %v - %v\n", s.Id, s.AppNickname)
 		if s.CurrentSubscription.Id == nil {
 			log.Printf("No subscription found for home %v\n", s.Id)
-		} else {
+		}
+		if s.CurrentSubscription.Id != nil || disableSubscriptionCheck {
 			log.Printf("Starting monitoring of home: %v - %v\n", s.Id, s.AppNickname)
-			log.Printf("Current subscription: %v\n", *s.CurrentSubscription.Id)
+			if s.CurrentSubscription.Id == nil {
+				log.Println("Current subscription: n/a")
+			} else {
+				log.Printf("Current subscription: %v\n", *s.CurrentSubscription.Id)
+			}
 			h := home.New(s.Id)
 			metrics.HomeInfo.WithLabelValues(
 				string(s.Id),
@@ -138,7 +146,9 @@ func main() {
 				for {
 					select {
 					case <-ticker.C:
-						h.UpdatePrices(ctx, client)
+						if s.CurrentSubscription.Id != nil {
+							h.UpdatePrices(ctx, client)
+						}
 						h.UpdatePrevious(ctx, client, tibber.ResolutionHourly)
 						h.UpdatePrevious(ctx, client, tibber.ResolutionDaily)
 						if slices.Contains(started, string(h.Id)) {
