@@ -17,6 +17,40 @@ entries:
         - title: Prices dashboard
           url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-prices.png
     apiVersion: v2
+    created: "2023-09-16T14:35:19.474827094Z"
+    description: Tibber exporter
+    digest: 1b720b1381d0b19d2d6ac92c2bac3f484c5caaae15e5901d41774436d45cdf73
+    home: https://github.com/terjesannum/tibber-exporter
+    keywords:
+    - tibber
+    - prometheus
+    - grafana
+    - monitoring
+    maintainers:
+    - email: terje@offpiste.org
+      name: Terje Sannum
+      url: https://github.com/terjesannum
+    name: tibber-exporter
+    type: application
+    urls:
+    - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-3.3.0/tibber-exporter-3.3.0.tgz
+    version: 3.3.0
+  - annotations:
+      artifacthub.io/images: |
+        - name: tibber-exporter
+          image: ghcr.io/terjesannum/tibber-exporter:latest
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/screenshots: |
+        - title: Grafana dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
+        - title: Grafana dashboard without Pulse
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
+        - title: Prices dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-prices.png
+    apiVersion: v2
     created: "2023-08-20T15:54:15.38946419Z"
     description: Tibber exporter
     digest: ed12af514ea7af3c00cb4ca157b6dfa7a838c1febce1196de69c8a7dabd3be5b
@@ -873,4 +907,4 @@ entries:
     urls:
     - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.0.0/tibber-exporter-1.0.0.tgz
     version: 1.0.0
-generated: "2023-08-20T15:54:15.38978529Z"
+generated: "2023-09-16T14:35:19.47556115Z"
