@@ -47,11 +47,13 @@ const maxAge = 5
 type MeasurementCollector struct {
 	measurements        *tibber.LiveMeasurement
 	timestampedValues   *tibber.TimestampedValues
+	gaugeValues         *home.GaugeValues
 	consumption         *prometheus.Desc
 	consumptionMin      *prometheus.Desc
 	consumptionMax      *prometheus.Desc
 	consumptionAvg      *prometheus.Desc
 	consumptionTotal    *prometheus.Desc
+	costToday           *prometheus.Desc
 	costTotal           *prometheus.Desc
 	current             *prometheus.Desc
 	voltage             *prometheus.Desc
@@ -60,16 +62,18 @@ type MeasurementCollector struct {
 	productionMin       *prometheus.Desc
 	productionMax       *prometheus.Desc
 	productionTotal     *prometheus.Desc
+	rewardToday         *prometheus.Desc
 	rewardTotal         *prometheus.Desc
 	consumptionReactive *prometheus.Desc
 	productionReactive  *prometheus.Desc
 	powerFactor         *prometheus.Desc
 }
 
-func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibber.TimestampedValues) *MeasurementCollector {
+func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibber.TimestampedValues, g *home.GaugeValues) *MeasurementCollector {
 	return &MeasurementCollector{
 		measurements:      m,
 		timestampedValues: tv,
+		gaugeValues:       g,
 		consumption: prometheus.NewDesc(
 			"tibber_power_consumption",
 			"Power consumption",
@@ -97,6 +101,12 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 		consumptionTotal: prometheus.NewDesc(
 			"tibber_power_consumption_day_total",
 			"Total power consumption since midnight",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		costToday: prometheus.NewDesc(
+			"tibber_power_cost_day",
+			"Total power cost since midnight",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
@@ -148,6 +158,12 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
+		rewardToday: prometheus.NewDesc(
+			"tibber_power_production_reward_day",
+			"Total power production reward since midnight",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
 		rewardTotal: prometheus.NewDesc(
 			"tibber_power_production_reward_day_total",
 			"Total power production reward since midnight",
@@ -181,6 +197,7 @@ func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.consumptionMax
 	ch <- c.consumptionAvg
 	ch <- c.consumptionTotal
+	ch <- c.costToday
 	ch <- c.costTotal
 	ch <- c.current
 	ch <- c.voltage
@@ -189,6 +206,7 @@ func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.productionMin
 	ch <- c.productionMax
 	ch <- c.productionTotal
+	ch <- c.rewardToday
 	ch <- c.rewardTotal
 	ch <- c.consumptionReactive
 	ch <- c.productionReactive
@@ -239,6 +257,14 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 			c.consumptionTotal,
 			prometheus.CounterValue,
 			c.measurements.AccumulatedConsumption,
+		),
+	)
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.costToday,
+			prometheus.GaugeValue,
+			c.gaugeValues.CostToday,
 		),
 	)
 	ch <- prometheus.NewMetricWithTimestamp(
@@ -364,6 +390,16 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 			c.measurements.AccumulatedProduction,
 		),
 	)
+	if c.gaugeValues.RewardToday != nil {
+		ch <- prometheus.NewMetricWithTimestamp(
+			c.measurements.Timestamp,
+			prometheus.MustNewConstMetric(
+				c.rewardToday,
+				prometheus.GaugeValue,
+				*c.gaugeValues.RewardToday,
+			),
+		)
+	}
 	if c.measurements.AccumulatedReward != nil {
 		ch <- prometheus.NewMetricWithTimestamp(
 			c.measurements.Timestamp,

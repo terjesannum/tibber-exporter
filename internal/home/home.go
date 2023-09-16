@@ -17,6 +17,11 @@ type Measurements struct {
 	LiveMeasurement tibber.LiveMeasurement `graphql:"liveMeasurement(homeId: $id)"`
 }
 
+type GaugeValues struct {
+	CostToday   float64
+	RewardToday *float64
+}
+
 type Home struct {
 	Id                graphql.ID
 	Prices            tibber.Prices `graphql:"home(id: $id)"`
@@ -24,6 +29,7 @@ type Home struct {
 	PreviousDay       tibber.PreviousPower
 	Measurements      Measurements
 	TimestampedValues tibber.TimestampedValues
+	GaugeValues       GaugeValues
 }
 
 func New(id graphql.ID) *Home {
@@ -186,6 +192,7 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl
 					log.Printf("Accumulated cost lower than stored value: %f(%s) < %f(%s)\n",
 						m.LiveMeasurement.AccumulatedCost, m.LiveMeasurement.Timestamp, h.Measurements.LiveMeasurement.AccumulatedCost, h.Measurements.LiveMeasurement.Timestamp)
 				}
+				h.GaugeValues.CostToday = m.LiveMeasurement.AccumulatedCost
 				if m.LiveMeasurement.AccumulatedProduction >= h.Measurements.LiveMeasurement.AccumulatedProduction ||
 					m.LiveMeasurement.Timestamp.YearDay() != h.Measurements.LiveMeasurement.Timestamp.YearDay() {
 					h.Measurements.LiveMeasurement.AccumulatedProduction = m.LiveMeasurement.AccumulatedProduction
@@ -202,6 +209,7 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl
 							*m.LiveMeasurement.AccumulatedReward, m.LiveMeasurement.Timestamp, *h.Measurements.LiveMeasurement.AccumulatedReward, h.Measurements.LiveMeasurement.Timestamp)
 					}
 				}
+				h.GaugeValues.RewardToday = m.LiveMeasurement.AccumulatedReward
 				if m.LiveMeasurement.CurrentL1 != nil {
 					h.TimestampedValues.CurrentL1.Timestamp = m.LiveMeasurement.Timestamp
 					h.TimestampedValues.CurrentL1.Value = *m.LiveMeasurement.CurrentL1
