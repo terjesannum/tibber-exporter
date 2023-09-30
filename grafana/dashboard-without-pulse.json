@@ -21,7 +21,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.2.3"
+      "version": "10.1.1"
     },
     {
       "type": "panel",
@@ -101,13 +101,14 @@
             "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 40,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -131,10 +132,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -144,43 +141,32 @@
           {
             "matcher": {
               "id": "byName",
+              "options": "Price inc. tax"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "Price per kWh"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
               "options": "Price per kWh"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Price inc. tax per kWh"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Price per kWh inc. tax"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-green",
+                  "fixedColor": "semi-dark-orange",
                   "mode": "fixed"
                 }
               }
@@ -282,7 +268,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -480,7 +466,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -526,6 +512,9 @@
             "lineWidth": 1,
             "scaleDistribution": {
               "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -584,6 +573,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.8,
+        "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
           "calcs": [],
@@ -666,7 +656,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -748,7 +738,7 @@
           "reverse": false
         }
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -792,6 +782,9 @@
             "lineWidth": 1,
             "scaleDistribution": {
               "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -850,6 +843,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.8,
+        "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
           "calcs": [],
@@ -932,7 +926,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -1014,7 +1008,7 @@
           "reverse": false
         }
       },
-      "pluginVersion": "9.2.3",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -1034,7 +1028,7 @@
     }
   ],
   "refresh": "1m",
-  "schemaVersion": 37,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1085,6 +1079,6 @@
   "timezone": "",
   "title": "Tibber (without pulse)",
   "uid": "Ft0TVdVVk",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }

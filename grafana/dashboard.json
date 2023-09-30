@@ -27,7 +27,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.1.6"
+      "version": "10.1.1"
     },
     {
       "type": "panel",
@@ -137,7 +137,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -206,9 +206,10 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "valueMode": "color"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -277,9 +278,10 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "valueMode": "color"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -348,9 +350,10 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "valueMode": "color"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -415,7 +418,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -613,7 +616,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -658,6 +661,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -790,7 +794,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -942,7 +946,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -1007,7 +1011,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -1043,13 +1047,14 @@
             "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 40,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1073,10 +1078,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -1086,43 +1087,32 @@
           {
             "matcher": {
               "id": "byName",
+              "options": "Price inc. tax"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "Price per kWh"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
               "options": "Price per kWh"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Price inc. tax per kWh"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Price per kWh inc. tax"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-green",
+                  "fixedColor": "semi-dark-orange",
                   "mode": "fixed"
                 }
               }
@@ -1232,7 +1222,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -1241,7 +1231,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(tibber_power_cost_day_total{home_id=\"$home\"})",
+          "expr": "avg(tibber_power_cost_day{home_id=\"$home\"})",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -1385,7 +1375,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -1406,7 +1396,7 @@
     }
   ],
   "refresh": "1m",
-  "schemaVersion": 37,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1457,6 +1447,6 @@
   "timezone": "",
   "title": "Tibber",
   "uid": "5rT8QDiVk",
-  "version": 5,
+  "version": 4,
   "weekStart": ""
 }
