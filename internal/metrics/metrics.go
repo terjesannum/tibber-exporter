@@ -216,7 +216,7 @@ func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 	timeDiff := time.Now().Sub(c.measurements.Timestamp)
 	if timeDiff.Minutes() > maxAge {
-		log.Printf("Measurements to old: %s\n", c.measurements.Timestamp)
+		log.Printf("Measurements too old: %s\n", c.measurements.Timestamp)
 		return
 	}
 	ch <- prometheus.NewMetricWithTimestamp(
