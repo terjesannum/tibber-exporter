@@ -175,7 +175,7 @@ func main() {
 		}
 	}
 
-	log.Println("Starting http listener")
+	log.Printf("Starting http listener %s\n", listenAddress)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Tibber exporter")
 	})
