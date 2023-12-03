@@ -16,6 +16,42 @@ entries:
           url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
         - title: Prices dashboard
           url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-prices.png
+        - title: Monthly overview
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-monthly.png
+    apiVersion: v2
+    created: "2023-12-03T09:03:56.599893464Z"
+    description: Tibber exporter
+    digest: a531bbf79a5c9a0c0292cd920fc6000bebefb96840d11794344265f202cb9723
+    home: https://github.com/terjesannum/tibber-exporter
+    keywords:
+    - tibber
+    - prometheus
+    - grafana
+    - monitoring
+    maintainers:
+    - email: terje@offpiste.org
+      name: Terje Sannum
+      url: https://github.com/terjesannum
+    name: tibber-exporter
+    type: application
+    urls:
+    - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-3.4.0/tibber-exporter-3.4.0.tgz
+    version: 3.4.0
+  - annotations:
+      artifacthub.io/images: |
+        - name: tibber-exporter
+          image: ghcr.io/terjesannum/tibber-exporter:latest
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/screenshots: |
+        - title: Grafana dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
+        - title: Grafana dashboard without Pulse
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
+        - title: Prices dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-prices.png
     apiVersion: v2
     created: "2023-11-10T16:34:08.607449Z"
     description: Tibber exporter
@@ -941,4 +977,4 @@ entries:
     urls:
     - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.0.0/tibber-exporter-1.0.0.tgz
     version: 1.0.0
-generated: "2023-11-10T16:34:08.607797112Z"
+generated: "2023-12-03T09:03:56.600120217Z"
