@@ -22,6 +22,7 @@ import (
 var (
 	token                    string
 	homesQuery               tibber.HomesQuery
+	liveFeedTimeout          int
 	liveUrl                  string
 	liveMeasurements         stringArgs
 	disableLiveMeasurements  stringArgs
@@ -49,6 +50,7 @@ func (sa *stringArgs) Set(s string) error {
 
 func init() {
 	flag.StringVar(&token, "token", os.Getenv("TIBBER_TOKEN"), "Tibber API token")
+	flag.IntVar(&liveFeedTimeout, "live-feed-timeout", 1, "Timeout in minutes for live feed")
 	flag.StringVar(&liveUrl, "live-url", "", "Override websocket url for live measurements")
 	flag.Var(&liveMeasurements, "live", "Ids of homes to always start live measurements")
 	flag.Var(&disableLiveMeasurements, "disable-live", "Ids of homes to disable live measurements")
@@ -132,9 +134,11 @@ func main() {
 			log.Printf("Realtime consumption enabled for %v: %v\n", s.Id, s.Features.RealTimeConsumptionEnabled)
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
 				log.Printf("Starting live measurements monitoring of home %v\n", s.Id)
+				log.Printf("Live feed timeout: %v minute\n", liveFeedTimeout)
 				go h.SubscribeMeasurements(ctx, hc, wsUrl, token)
 				prometheus.MustRegister(metrics.NewMeasurementCollector(string(s.Id), &h.Measurements.LiveMeasurement, &h.TimestampedValues, &h.GaugeValues))
 				started = append(started, string(s.Id))
+				h.Measurements.LiveMeasurement.Timestamp = time.Now()
 			} else {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}
@@ -153,7 +157,7 @@ func main() {
 						h.UpdatePrevious(ctx, client, tibber.ResolutionDaily)
 						if slices.Contains(started, string(h.Id)) {
 							timeDiff := time.Now().Sub(h.Measurements.LiveMeasurement.Timestamp)
-							if timeDiff.Minutes() > 1 {
+							if timeDiff.Minutes() > float64(liveFeedTimeout) {
 								exit(fmt.Sprintf("No measurements received for home %s since %s. Exiting...\n", h.Id, h.Measurements.LiveMeasurement.Timestamp))
 							}
 						}
