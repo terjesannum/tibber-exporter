@@ -13,6 +13,7 @@ import (
 	"github.com/hasura/go-graphql-client"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
 	"github.com/terjesannum/tibber-exporter/internal/home"
 	"github.com/terjesannum/tibber-exporter/internal/metrics"
 	"github.com/terjesannum/tibber-exporter/internal/tibber"
@@ -49,6 +50,9 @@ func (sa *stringArgs) Set(s string) error {
 }
 
 func init() {
+	version.Version = "3.5.0"
+	var showVersion = flag.Bool("version", false, "Print version information and exit.")
+
 	flag.StringVar(&token, "token", os.Getenv("TIBBER_TOKEN"), "Tibber API token")
 	flag.IntVar(&liveFeedTimeout, "live-feed-timeout", 1, "Timeout in minutes for live feed")
 	flag.StringVar(&liveUrl, "live-url", "", "Override websocket url for live measurements")
@@ -57,9 +61,16 @@ func init() {
 	flag.BoolVar(&disableSubscriptionCheck, "disable-subscription-check", false, "Disable check on active Tibber subscription")
 	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests")
 	flag.Parse()
+
+	if *showVersion {
+		fmt.Printf("%s\n", version.Print("tibber-exporter"))
+		os.Exit(0)
+	}
+
 	if userAgent == "" {
 		userAgent = "tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
 	}
+
 }
 
 func exit(msg string) {
@@ -130,6 +141,8 @@ func main() {
 				s.MeteringPointData.GridCompany,
 				s.MeteringPointData.PriceAreaCode,
 			).Set(1)
+
+			prometheus.MustRegister(version.NewCollector("tibber-exporter"))
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
 			log.Printf("Realtime consumption enabled for %v: %v\n", s.Id, s.Features.RealTimeConsumptionEnabled)
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
