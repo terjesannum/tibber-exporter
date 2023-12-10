@@ -1,7 +1,5 @@
 FROM golang:1.21.4-alpine3.18 as builder
 
-ARG UA="tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
-
 RUN apk --update add ca-certificates make git
 RUN echo 'tibber:*:65532:' > /tmp/group && \
     echo 'tibber:*:65532:65532:tibber:/:/tibber-exporter' > /tmp/passwd
