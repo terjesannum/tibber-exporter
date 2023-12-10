@@ -36,8 +36,6 @@ jobs:
         provenance: false
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/tibber-exporter:${{ steps.get_version.outputs.version }},ghcr.io/${{ github.repository_owner }}/tibber-exporter:latest
-        build-args: |
-          UA=tibber-exporter/${{ steps.get_version.outputs.version }} (${{ github.server_url}}/${{ github.repository }})
 
   release-chart:
     name: Release chart
@@ -99,5 +97,5 @@ jobs:
           goarch: ${{ matrix.goarch }}
           asset_name: "tibber-exporter-${{ steps.get_version.outputs.version }}-${{ matrix.goos }}-${{ matrix.goarch }}"
           release_tag: "tibber-exporter-${{ steps.get_version.outputs.version }}"
+          build_command: make
           md5sum: false
-          ldflags: "-X 'main.userAgent=tibber-exporter/${{ steps.get_version.outputs.version }} (${{ github.server_url}}/${{ github.repository }})'"
