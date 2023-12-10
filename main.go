@@ -28,6 +28,7 @@ var (
 	liveMeasurements         stringArgs
 	disableLiveMeasurements  stringArgs
 	disableSubscriptionCheck bool
+	showVersion              bool
 	listenAddress            string
 	userAgent                string
 )
@@ -50,9 +51,7 @@ func (sa *stringArgs) Set(s string) error {
 }
 
 func init() {
-	version.Version = "3.5.0"
-	var showVersion = flag.Bool("version", false, "Print version information and exit.")
-
+	flag.BoolVar(&showVersion, "version", false, "Print version information and exit")
 	flag.StringVar(&token, "token", os.Getenv("TIBBER_TOKEN"), "Tibber API token")
 	flag.IntVar(&liveFeedTimeout, "live-feed-timeout", 1, "Timeout in minutes for live feed")
 	flag.StringVar(&liveUrl, "live-url", "", "Override websocket url for live measurements")
@@ -61,12 +60,6 @@ func init() {
 	flag.BoolVar(&disableSubscriptionCheck, "disable-subscription-check", false, "Disable check on active Tibber subscription")
 	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests")
 	flag.Parse()
-
-	if *showVersion {
-		fmt.Printf("%s\n", version.Print("tibber-exporter"))
-		os.Exit(0)
-	}
-
 	if userAgent == "" {
 		userAgent = "tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
 	}
@@ -91,6 +84,10 @@ func getHomesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	if showVersion {
+		fmt.Printf("%s\n", version.Print("tibber-exporter"))
+		os.Exit(0)
+	}
 	log.Printf("Starting %s\n", userAgent)
 	ctx := context.Background()
 	hc := &http.Client{Transport: &transport{Token: token, UserAgent: userAgent}}
@@ -142,7 +139,7 @@ func main() {
 				s.MeteringPointData.PriceAreaCode,
 			).Set(1)
 
-			prometheus.MustRegister(version.NewCollector("tibber-exporter"))
+			prometheus.MustRegister(version.NewCollector("tibber_exporter"))
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
 			log.Printf("Realtime consumption enabled for %v: %v\n", s.Id, s.Features.RealTimeConsumptionEnabled)
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
