@@ -22,7 +22,7 @@ EXPOSE 8080
 
 COPY --from=builder /tmp/passwd /tmp/group /etc/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=builder /workspace/bin/tibber-exporter .
+COPY --from=builder /workspace/tibber-exporter .
 
 USER 65532:65532
 

@@ -1,5 +1,5 @@
 build: deps
-	CGO_ENABLED=0 go build -o bin/tibber-exporter \
+	CGO_ENABLED=0 go build -o tibber-exporter \
 		-ldflags " \
 		-X github.com/prometheus/common/version.BuildUser=$(shell id -un) \
 		-X github.com/prometheus/common/version.Branch=$(shell git rev-parse --abbrev-ref HEAD) \
@@ -9,4 +9,3 @@ build: deps
 		"
 deps:
 	go mod download
-
