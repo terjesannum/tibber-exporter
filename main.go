@@ -60,10 +60,11 @@ func init() {
 	flag.BoolVar(&disableSubscriptionCheck, "disable-subscription-check", false, "Disable check on active Tibber subscription")
 	flag.StringVar(&listenAddress, "listen-address", ":8080", "Address to listen on for HTTP requests")
 	flag.Parse()
-	if userAgent == "" {
+	if version.Version == "" {
 		userAgent = "tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
+	} else {
+		userAgent = fmt.Sprintf("tibber-exporter/%s (https://github.com/terjesannum/tibber-exporter)", version.Version)
 	}
-
 }
 
 func exit(msg string) {
