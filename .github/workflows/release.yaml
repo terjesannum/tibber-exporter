@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
     - name: Login GHCR
-      uses: docker/login-action@v2
+      uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -29,7 +29,7 @@ jobs:
       run: "sed -n 's/^version: /version=/p' charts/tibber-exporter/Chart.yaml >> $GITHUB_OUTPUT"
     - name: Build and push
       id: docker_build
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         context: .
         platforms: linux/amd64,linux/arm64,linux/arm/v7
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -60,7 +60,7 @@ jobs:
           token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.5.0
+        uses: helm/chart-releaser-action@v1.6.1
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
@@ -82,14 +82,14 @@ jobs:
           - goarch: arm
             goos: darwin
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Get version
         id: get_version
         run: "sed -n 's/^version: /version=/p' charts/tibber-exporter/Chart.yaml >> $GITHUB_OUTPUT"
       - name: Get go version
         id: get_go_version
         run: sed -n -E '/^FROM/ {s/^FROM golang:([0-9.]+).*/go_version=\1/p;q}' Dockerfile >> $GITHUB_OUTPUT
-      - uses: wangyoucao577/go-release-action@v1.37
+      - uses: wangyoucao577/go-release-action@v1.41
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goversion: ${{ steps.get_go_version.outputs.go_version }}
