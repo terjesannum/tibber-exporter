@@ -149,7 +149,6 @@ func main() {
 				go h.SubscribeMeasurements(ctx, hc, wsUrl, token)
 				prometheus.MustRegister(metrics.NewMeasurementCollector(string(s.Id), &h.Measurements.LiveMeasurement, &h.TimestampedValues, &h.GaugeValues))
 				started = append(started, string(s.Id))
-				h.Measurements.LiveMeasurement.Timestamp = time.Now()
 			} else {
 				log.Printf("Live measurements not available for home %v\n", s.Id)
 			}
