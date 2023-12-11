@@ -138,6 +138,7 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl
 	subscriber := graphql.NewSubscriptionClient(wsUrl)
 	subscriber.WithProtocol(graphql.GraphQLWS)
 	subscriber.WithConnectionParams(map[string]interface{}{"token": token})
+	subscriber.WithSyncMode(true)
 	subscriber.WithLog(log.Println)
 	subscriber.WithRetryTimeout(time.Second * 5)
 	subscriber.WithWebSocketOptions(graphql.WebsocketOptions{HTTPClient: hc})
