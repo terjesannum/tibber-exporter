@@ -3,10 +3,10 @@ module github.com/terjesannum/tibber-exporter
 go 1.21
 
 require (
-	github.com/hasura/go-graphql-client v0.10.0
+	github.com/hasura/go-graphql-client v0.10.1
 	github.com/prometheus/client_golang v1.17.0
 	github.com/prometheus/common v0.45.0
-	golang.org/x/exp v0.0.0-20231127185646-65229373498e
+	golang.org/x/exp v0.0.0-20231206192017-f3f8817b8deb
 )
 
 require (
