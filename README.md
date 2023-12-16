@@ -153,6 +153,7 @@ Import the [dashboard](grafana/dashboard.json) or use id `16804` and import from
 | tibber_voltage                           | Phase voltage                                        | Gauge   |
 | tibber_current                           | Line current                                         | Gauge   |
 | tibber_signal_strength                   | Tibber Pulse signal strength                         | Gauge   |
+| tibber_exporter_build_info               | Tibber exporter build and version info               | Gauge   |
 
 More infomation can be found in the [Tibber API documentation](https://developer.tibber.com/docs/reference).
 
