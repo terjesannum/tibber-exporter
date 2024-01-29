@@ -105,6 +105,7 @@ func main() {
 		log.Printf("Overiding websocket url with: %s\n", liveUrl)
 		wsUrl = liveUrl
 	}
+	prometheus.MustRegister(version.NewCollector("tibber_exporter"))
 	var started []string
 	for _, s := range homesQuery.Viewer.Homes {
 		s := s
@@ -140,7 +141,6 @@ func main() {
 				s.MeteringPointData.PriceAreaCode,
 			).Set(1)
 
-			prometheus.MustRegister(version.NewCollector("tibber_exporter"))
 			prometheus.MustRegister(metrics.NewHomeCollector(h))
 			log.Printf("Realtime consumption enabled for %v: %v\n", s.Id, s.Features.RealTimeConsumptionEnabled)
 			if (s.Features.RealTimeConsumptionEnabled || slices.Contains(liveMeasurements, string(s.Id))) && !slices.Contains(disableLiveMeasurements, string(s.Id)) {
