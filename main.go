@@ -67,17 +67,23 @@ func init() {
 		userAgent = fmt.Sprintf("tibber-exporter/%s (https://github.com/terjesannum/tibber-exporter)", version.Version)
 	}
 
-	//Get Forcefully enabled realtime and excluded homes from env and append them to slice
-	liveFromEnv := strings.Split(os.Getenv("LIVE_HOMES"), ",")
-	if len(liveFromEnv) > 0 {
-		for _, liveHome := range liveFromEnv {
-			liveMeasurements = append(liveMeasurements, liveHome)
+	//Get homes with Forcefully enabled/disabled live Measurement Feature from Environment Variable and append them to slice
+	envEnabledHomes, envPresent := os.LookupEnv("TIBBER_LIVE_ENABLE_HOMES")
+	if envPresent {
+		envEnabledHomes := strings.Split(envEnabledHomes, ",")
+		for _, enabledHome := range envEnabledHomes {
+			if len(enabledHome) >= 1 {
+				liveMeasurements = append(liveMeasurements, enabledHome)
+			}
 		}
 	}
-	excludeFromEnv := strings.Split(os.Getenv("EXCLUDE_HOMES"), ",")
-	if len(excludeFromEnv) > 0 {
-		for _, excludeHome := range excludeFromEnv {
-			disableLiveMeasurements = append(disableLiveMeasurements, excludeHome)
+	envDisabledHomes, envPresent := os.LookupEnv("TIBBER_LIVE_DISABLE_HOMES")
+	if envPresent {
+		envDisabledHomes := strings.Split(envDisabledHomes, ",")
+		for _, disabledHome := range envDisabledHomes {
+			if len(disabledHome) >= 1 {
+				disableLiveMeasurements = append(disableLiveMeasurements, disabledHome)
+			}
 		}
 	}
 }
