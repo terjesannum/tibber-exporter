@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/hasura/go-graphql-client"
@@ -64,6 +65,26 @@ func init() {
 		userAgent = "tibber-exporter (https://github.com/terjesannum/tibber-exporter)"
 	} else {
 		userAgent = fmt.Sprintf("tibber-exporter/%s (https://github.com/terjesannum/tibber-exporter)", version.Version)
+	}
+
+	//Get homes with Forcefully enabled/disabled live Measurement Feature from Environment Variable and append them to slice
+	envEnabledHomes, envPresent := os.LookupEnv("TIBBER_LIVE_ENABLE_HOMES")
+	if envPresent {
+		envEnabledHomes := strings.Split(envEnabledHomes, ",")
+		for _, enabledHome := range envEnabledHomes {
+			if len(enabledHome) >= 1 {
+				liveMeasurements = append(liveMeasurements, enabledHome)
+			}
+		}
+	}
+	envDisabledHomes, envPresent := os.LookupEnv("TIBBER_LIVE_DISABLE_HOMES")
+	if envPresent {
+		envDisabledHomes := strings.Split(envDisabledHomes, ",")
+		for _, disabledHome := range envDisabledHomes {
+			if len(disabledHome) >= 1 {
+				disableLiveMeasurements = append(disableLiveMeasurements, disabledHome)
+			}
+		}
 	}
 }
 
