@@ -1,4 +1,4 @@
-FROM golang:1.21.5-alpine3.19 as builder
+FROM golang:1.21.5-alpine3.19 AS builder
 
 RUN apk --update add ca-certificates make git
 RUN echo 'tibber:*:65532:' > /tmp/group && \
