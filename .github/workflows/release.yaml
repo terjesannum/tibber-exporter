@@ -29,7 +29,7 @@ jobs:
       run: "sed -n 's/^version: /version=/p' charts/tibber-exporter/Chart.yaml >> $GITHUB_OUTPUT"
     - name: Build and push
       id: docker_build
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         platforms: linux/amd64,linux/arm64,linux/arm/v7
@@ -55,9 +55,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Install Helm
-        uses: azure/setup-helm@v3
-        with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
+        uses: azure/setup-helm@v4
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
@@ -89,7 +87,7 @@ jobs:
       - name: Get go version
         id: get_go_version
         run: sed -n -E '/^FROM/ {s/^FROM golang:([0-9.]+).*/go_version=\1/p;q}' Dockerfile >> $GITHUB_OUTPUT
-      - uses: wangyoucao577/go-release-action@v1.41
+      - uses: wangyoucao577/go-release-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goversion: ${{ steps.get_go_version.outputs.go_version }}
