@@ -13,6 +13,7 @@ import (
 
 	"github.com/hasura/go-graphql-client"
 	"github.com/prometheus/client_golang/prometheus"
+	promver "github.com/prometheus/client_golang/prometheus/collectors/version"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/version"
 	"github.com/terjesannum/tibber-exporter/internal/home"
@@ -126,7 +127,7 @@ func main() {
 		log.Printf("Overiding websocket url with: %s\n", liveUrl)
 		wsUrl = liveUrl
 	}
-	prometheus.MustRegister(version.NewCollector("tibber_exporter"))
+	prometheus.MustRegister(promver.NewCollector("tibber_exporter"))
 	var started []string
 	for _, s := range homesQuery.Viewer.Homes {
 		s := s
