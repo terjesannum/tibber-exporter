@@ -251,6 +251,12 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl
 					h.TimestampedValues.PowerFactor.Timestamp = m.LiveMeasurement.Timestamp
 					h.TimestampedValues.PowerFactor.Value = *m.LiveMeasurement.PowerFactor
 				}
+				if m.LiveMeasurement.LastMeterConsumption >= h.Measurements.LiveMeasurement.LastMeterConsumption {
+					h.Measurements.LiveMeasurement.LastMeterConsumption = m.LiveMeasurement.LastMeterConsumption
+				}
+				if m.LiveMeasurement.LastMeterProduction >= h.Measurements.LiveMeasurement.LastMeterProduction {
+					h.Measurements.LiveMeasurement.LastMeterProduction = m.LiveMeasurement.LastMeterProduction
+				}
 				h.Measurements.LiveMeasurement.Timestamp = m.LiveMeasurement.Timestamp
 			}
 			return err

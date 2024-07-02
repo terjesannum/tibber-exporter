@@ -45,28 +45,30 @@ var (
 const maxAge = 5
 
 type MeasurementCollector struct {
-	measurements        *tibber.LiveMeasurement
-	timestampedValues   *tibber.TimestampedValues
-	gaugeValues         *home.GaugeValues
-	consumption         *prometheus.Desc
-	consumptionMin      *prometheus.Desc
-	consumptionMax      *prometheus.Desc
-	consumptionAvg      *prometheus.Desc
-	consumptionTotal    *prometheus.Desc
-	costToday           *prometheus.Desc
-	costTotal           *prometheus.Desc
-	current             *prometheus.Desc
-	voltage             *prometheus.Desc
-	signalStrength      *prometheus.Desc
-	production          *prometheus.Desc
-	productionMin       *prometheus.Desc
-	productionMax       *prometheus.Desc
-	productionTotal     *prometheus.Desc
-	rewardToday         *prometheus.Desc
-	rewardTotal         *prometheus.Desc
-	consumptionReactive *prometheus.Desc
-	productionReactive  *prometheus.Desc
-	powerFactor         *prometheus.Desc
+	measurements         *tibber.LiveMeasurement
+	timestampedValues    *tibber.TimestampedValues
+	gaugeValues          *home.GaugeValues
+	consumption          *prometheus.Desc
+	consumptionMin       *prometheus.Desc
+	consumptionMax       *prometheus.Desc
+	consumptionAvg       *prometheus.Desc
+	consumptionTotal     *prometheus.Desc
+	costToday            *prometheus.Desc
+	costTotal            *prometheus.Desc
+	current              *prometheus.Desc
+	voltage              *prometheus.Desc
+	signalStrength       *prometheus.Desc
+	production           *prometheus.Desc
+	productionMin        *prometheus.Desc
+	productionMax        *prometheus.Desc
+	productionTotal      *prometheus.Desc
+	rewardToday          *prometheus.Desc
+	rewardTotal          *prometheus.Desc
+	consumptionReactive  *prometheus.Desc
+	productionReactive   *prometheus.Desc
+	powerFactor          *prometheus.Desc
+	lastMeterConsumption *prometheus.Desc
+	lastMeterProduction  *prometheus.Desc
 }
 
 func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibber.TimestampedValues, g *home.GaugeValues) *MeasurementCollector {
@@ -188,6 +190,18 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
+		lastMeterConsumption: prometheus.NewDesc(
+			"tibber_lastMeterConsumption",
+			"Last State of Meter Consumption Register",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		lastMeterProduction: prometheus.NewDesc(
+			"tibber_lastMeterProduction",
+			"Last State of Meter Production Register",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
 	}
 }
 
@@ -211,6 +225,8 @@ func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.consumptionReactive
 	ch <- c.productionReactive
 	ch <- c.powerFactor
+	ch <- c.lastMeterConsumption
+	ch <- c.lastMeterProduction
 }
 
 func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
@@ -443,6 +459,22 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 			),
 		)
 	}
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.lastMeterConsumption,
+			prometheus.CounterValue,
+			c.measurements.LastMeterConsumption,
+		),
+	)
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.lastMeterProduction,
+			prometheus.CounterValue,
+			c.measurements.LastMeterProduction,
+		),
+	)
 }
 
 type HomeCollector struct {
