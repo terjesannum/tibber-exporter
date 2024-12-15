@@ -10,6 +10,6 @@ datasources:
   - name: Tibber exporter
     uid: 2
     access: proxy
-    type: marcusolsson-json-datasource
+    type: yesoreyeram-infinity-datasource
     url: http://tibber-exporter:8080
     isDefault: false

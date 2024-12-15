@@ -23,7 +23,7 @@ These metrics can also be used for a [monthly overview dashboard](grafana/dashbo
 
 #### Next day prices
 
-The Tibber API provides power prices for the current and the next day, but storing future data can't be done easily in Prometheus. To be able to show future power prices, this exporter also has a JSON service which can be queried to get this data. In Grafana this can be used with the [JSON API datasource plugin](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/).
+The Tibber API provides power prices for the current and the next day, but storing future data can't be done easily in Prometheus. To be able to show future power prices, this exporter also has a JSON service which can be queried to get this data. In Grafana this can be used with the [Infinity datasource plugin](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/).
 
 | Endpoint                                  | Description                                               |
 |-------------------------------------------|-----------------------------------------------------------|
