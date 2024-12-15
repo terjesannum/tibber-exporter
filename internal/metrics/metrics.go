@@ -159,14 +159,14 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 			prometheus.Labels{"home_id": homeId},
 		),
 		rewardToday: prometheus.NewDesc(
-			"tibber_power_production_reward_day",
-			"Total power production reward since midnight",
+			"tibber_reward_day",
+			"Total reward since midnight",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
 		rewardTotal: prometheus.NewDesc(
-			"tibber_power_production_reward_day_total",
-			"Total power production reward since midnight",
+			"tibber_reward_day_total",
+			"Total reward since midnight",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),

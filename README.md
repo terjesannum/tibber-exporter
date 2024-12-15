@@ -144,12 +144,12 @@ Import the [dashboard](grafana/dashboard.json) or use id `16804` and import from
 | tibber_power_production_day_total        | Total power production today                         | Counter |
 | tibber_power_production_previous_hour    | Total power production previous hour                 | Gauge   |
 | tibber_power_production_previous_day     | Total power production yesterday                     | Gauge   |
-| tibber_power_production_reward_day       | Total power production reward today                  | Gauge   |
-| tibber_power_production_reward_day_total | Total power production reward today                  | Counter |
 | tibber_power_production_reactive         | Current net reactive production                      | Gauge   |
 | tibber_power_factor                      | Current power factor (active power / apparent power) | Gauge   |
 | tibber_power_profit_previous_hour        | Total power profit previous hour                     | Gauge   |
 | tibber_power_profit_previous_day         | Total power profit yesterday                         | Gauge   |
+| tibber_reward_day                        | Total reward today                                   | Gauge   |
+| tibber_reward_day_total                  | Total reward today                                   | Counter |
 | tibber_voltage                           | Phase voltage                                        | Gauge   |
 | tibber_current                           | Line current                                         | Gauge   |
 | tibber_signal_strength                   | Tibber Pulse signal strength                         | Gauge   |
