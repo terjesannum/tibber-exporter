@@ -53,6 +53,7 @@ type MeasurementCollector struct {
 	consumptionMax      *prometheus.Desc
 	consumptionAvg      *prometheus.Desc
 	consumptionTotal    *prometheus.Desc
+	consumptionMeter    *prometheus.Desc
 	costToday           *prometheus.Desc
 	costTotal           *prometheus.Desc
 	current             *prometheus.Desc
@@ -62,6 +63,7 @@ type MeasurementCollector struct {
 	productionMin       *prometheus.Desc
 	productionMax       *prometheus.Desc
 	productionTotal     *prometheus.Desc
+	productionMeter     *prometheus.Desc
 	rewardToday         *prometheus.Desc
 	rewardTotal         *prometheus.Desc
 	consumptionReactive *prometheus.Desc
@@ -101,6 +103,12 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 		consumptionTotal: prometheus.NewDesc(
 			"tibber_power_consumption_day_total",
 			"Total power consumption since midnight",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
+		consumptionMeter: prometheus.NewDesc(
+			"tibber_power_consumption_meter",
+			"Total power consumption on meter",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
@@ -158,6 +166,12 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
+		productionMeter: prometheus.NewDesc(
+			"tibber_power_production_meter",
+			"Total power production on meter",
+			nil,
+			prometheus.Labels{"home_id": homeId},
+		),
 		rewardToday: prometheus.NewDesc(
 			"tibber_power_production_reward_day",
 			"Total power production reward since midnight",
@@ -197,6 +211,7 @@ func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.consumptionMax
 	ch <- c.consumptionAvg
 	ch <- c.consumptionTotal
+	ch <- c.consumptionMeter
 	ch <- c.costToday
 	ch <- c.costTotal
 	ch <- c.current
@@ -206,6 +221,7 @@ func (c *MeasurementCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.productionMin
 	ch <- c.productionMax
 	ch <- c.productionTotal
+	ch <- c.productionMeter
 	ch <- c.rewardToday
 	ch <- c.rewardTotal
 	ch <- c.consumptionReactive
@@ -257,6 +273,14 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 			c.consumptionTotal,
 			prometheus.CounterValue,
 			c.measurements.AccumulatedConsumption,
+		),
+	)
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.consumptionMeter,
+			prometheus.GaugeValue,
+			c.measurements.LastMeterConsumption,
 		),
 	)
 	ch <- prometheus.NewMetricWithTimestamp(
@@ -388,6 +412,14 @@ func (c *MeasurementCollector) Collect(ch chan<- prometheus.Metric) {
 			c.productionTotal,
 			prometheus.CounterValue,
 			c.measurements.AccumulatedProduction,
+		),
+	)
+	ch <- prometheus.NewMetricWithTimestamp(
+		c.measurements.Timestamp,
+		prometheus.MustNewConstMetric(
+			c.productionMeter,
+			prometheus.CounterValue,
+			c.measurements.LastMeterProduction,
 		),
 	)
 	if c.gaugeValues.RewardToday != nil {

@@ -132,6 +132,7 @@ type LiveMeasurement struct {
 	MinPower                float64
 	MaxPower                float64
 	AveragePower            float64
+	LastMeterConsumption    float64
 	AccumulatedConsumption  float64
 	AccumulatedCost         float64
 	CurrentL1               *float64
@@ -148,6 +149,7 @@ type LiveMeasurement struct {
 	PowerProductionReactive *float64
 	MinPowerProduction      float64
 	MaxPowerProduction      float64
+	LastMeterProduction     float64
 	PowerFactor             *float64
 }
 

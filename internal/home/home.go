@@ -174,9 +174,11 @@ func (h *Home) SubscribeMeasurements(ctx context.Context, hc *http.Client, wsUrl
 				h.Measurements.LiveMeasurement.MinPower = m.LiveMeasurement.MinPower
 				h.Measurements.LiveMeasurement.MaxPower = m.LiveMeasurement.MaxPower
 				h.Measurements.LiveMeasurement.AveragePower = m.LiveMeasurement.AveragePower
+				h.Measurements.LiveMeasurement.LastMeterConsumption = m.LiveMeasurement.LastMeterConsumption
 				h.Measurements.LiveMeasurement.PowerProduction = m.LiveMeasurement.PowerProduction
 				h.Measurements.LiveMeasurement.MinPowerProduction = m.LiveMeasurement.MinPowerProduction
 				h.Measurements.LiveMeasurement.MaxPowerProduction = m.LiveMeasurement.MaxPowerProduction
+				h.Measurements.LiveMeasurement.LastMeterProduction = m.LiveMeasurement.LastMeterProduction
 				// Each hour tibber seems to adjust readings (to official hourly reading?) and the accumulated values could be a bit lower that the previous.
 				// This causes problems for prometheus counters, so skip those values.
 				if m.LiveMeasurement.AccumulatedConsumption >= h.Measurements.LiveMeasurement.AccumulatedConsumption ||
