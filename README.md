@@ -164,4 +164,4 @@ More infomation can be found in the [Tibber API documentation](https://developer
 
 I would be happy if you use [this referral code](https://invite.tibber.com/754c625a). That will give each of us a bonus to use on stuff like Tibber Pulse :smile:
 
-Or register the code `qandobma` directly in the app if you signed up without an invite.
+Or register the code `754c625a` directly in the app if you signed up without an invite.
