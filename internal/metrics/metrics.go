@@ -191,14 +191,14 @@ func NewMeasurementCollector(homeId string, m *tibber.LiveMeasurement, tv *tibbe
 			prometheus.Labels{"home_id": homeId},
 		),
 		lastMeterConsumption: prometheus.NewDesc(
-			"tibber_lastMeterConsumption",
-			"Last State of Meter Consumption Register",
+			"tibber_power_consumption_meter_total",
+			"Last consumption meter state",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
 		lastMeterProduction: prometheus.NewDesc(
-			"tibber_lastMeterProduction",
-			"Last State of Meter Production Register",
+			"tibber_power_production_meter_total",
+			"Last production meter state",
 			nil,
 			prometheus.Labels{"home_id": homeId},
 		),
