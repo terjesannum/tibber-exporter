@@ -112,6 +112,11 @@ func (p Price) MarshalJSON() ([]byte, error) {
 	return json.Marshal(pj)
 }
 
+type PriceInfoResolution string
+
+const PriceInfoHourly PriceInfoResolution = "HOURLY"
+const PriceInfoQuarterHourly PriceInfoResolution = "QUARTER_HOURLY"
+
 type Prices struct {
 	Viewer struct {
 		Home struct {
@@ -120,7 +125,7 @@ type Prices struct {
 					Current  Price
 					Today    []Price
 					Tomorrow []Price
-				}
+				} `graphql:"priceInfo(resolution: $resolution)"`
 			}
 		} `graphql:"home(id: $id)"`
 	}
