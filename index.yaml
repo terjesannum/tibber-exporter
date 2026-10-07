@@ -19,6 +19,42 @@ entries:
         - title: Monthly overview
           url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-monthly.png
     apiVersion: v2
+    created: "2026-10-07T15:47:16.20731598Z"
+    description: Tibber exporter
+    digest: 407f0f4e89968094ae4c482b2ab8ae7e12355f15bf85177026b686541ef7a2b5
+    home: https://github.com/terjesannum/tibber-exporter
+    keywords:
+    - tibber
+    - prometheus
+    - grafana
+    - monitoring
+    maintainers:
+    - email: terje@offpiste.org
+      name: Terje Sannum
+      url: https://github.com/terjesannum
+    name: tibber-exporter
+    type: application
+    urls:
+    - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-3.11.0/tibber-exporter-3.11.0.tgz
+    version: 3.11.0
+  - annotations:
+      artifacthub.io/images: |
+        - name: tibber-exporter
+          image: ghcr.io/terjesannum/tibber-exporter:latest
+          platforms:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
+      artifacthub.io/screenshots: |
+        - title: Grafana dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard.png
+        - title: Grafana dashboard without Pulse
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-without-pulse.png
+        - title: Prices dashboard
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-prices.png
+        - title: Monthly overview
+          url: https://raw.githubusercontent.com/terjesannum/tibber-exporter/master/grafana/dashboard-monthly.png
+    apiVersion: v2
     created: "2025-10-21T20:00:01.896021275Z"
     description: Tibber exporter
     digest: 5d7e1d5b3edfcd5d5745ac49e7b5f1f1ff2b491c865c5c81197d26a06c699f4e
@@ -1481,4 +1517,4 @@ entries:
     urls:
     - https://github.com/terjesannum/tibber-exporter/releases/download/tibber-exporter-1.0.0/tibber-exporter-1.0.0.tgz
     version: 1.0.0
-generated: "2025-10-21T20:00:01.896527557Z"
+generated: "2026-10-07T15:47:16.207777542Z"
