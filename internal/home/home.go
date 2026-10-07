@@ -30,6 +30,7 @@ type Home struct {
 	Measurements      Measurements
 	TimestampedValues tibber.TimestampedValues
 	GaugeValues       GaugeValues
+	useHourlyPrices   bool
 }
 
 func New(id graphql.ID) *Home {
@@ -39,16 +40,31 @@ func New(id graphql.ID) *Home {
 }
 
 func (h *Home) UpdatePrices(ctx context.Context, client *graphql.Client) {
-	var prices tibber.Prices
 	log.Printf("Updating prices for %v\n", h.Id)
+	resolution := tibber.PriceInfoQuarterHourly
+	if h.useHourlyPrices {
+		resolution = tibber.PriceInfoHourly
+	}
+	var prices tibber.Prices
 	err := client.Query(ctx, &prices, map[string]interface{}{
-		"id": h.Id,
+		"id":         h.Id,
+		"resolution": resolution,
 	})
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	h.Prices = prices
+	if len(prices.Viewer.Home.CurrentSubscription.PriceInfo.Today) > 0 {
+		h.Prices = prices
+		return
+	}
+	if h.useHourlyPrices {
+		return
+	}
+	// Quarter-hourly returned no today prices (seen in some hourly-only markets).
+	log.Printf("Using hourly prices for home %v (quarter-hourly not available in this market)\n", h.Id)
+	h.useHourlyPrices = true
+	h.UpdatePrices(ctx, client)
 }
 
 func (h *Home) GetPricesHandler(w http.ResponseWriter, r *http.Request) {
